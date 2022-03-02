@@ -44,11 +44,7 @@ class Basic(commands.Cog):
 
         embed = discord.Embed(colour=colour, title="About YeeeeeBot")
         embed.add_field(name="Servers active:", value=len(self.bot.guilds), inline=False)
-        embed.add_field(name="Instagram :camera_with_flash:", value="https://www.instagram.com/yeeee.bot", inline=True)
-        embed.add_field(name="Twitter :dove:", value="https://twitter.com/bot_yeee", inline=True)
-        embed.add_field(name="Buissnes Mail :chart_with_upwards_trend:", value="yeeeeebot@gmail.com", inline=True)
         embed.add_field(name="Developer/Dad :desktop:", value="YeeeeeBoi", inline=True)
-        embed.add_field(name="Instagram :camera_with_flash:", value="https://www.instagram.com/einserdnuss", inline=True)
         await ctx.send(embed=embed)
 
     @commands.command(description="Get server status",brief="Get server status") # get info about the server
