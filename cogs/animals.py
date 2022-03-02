@@ -31,7 +31,7 @@ class images(commands.Cog):
                     data = await r.json()
                     print(data['url'])
 
-                    embed = discord.Embed(colour=0xE6A8FF, title=":dog: Woof :dog:") #sending the message
+                    embed = discord.Embed(colour=0xE6A8FF, title=":dog: Woof Woof :dog:") #sending the message
                     embed.set_image(url=data['url'])
                     embed.set_footer(text="Powered by: http://random.dog")
                     await ctx.send(embed=embed)
