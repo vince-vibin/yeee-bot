@@ -7,10 +7,11 @@ class Reddit(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    reddit = praw.Reddit(client_id ="S1vglQgURi0GDQ", client_secret = "lYhIwXcGR8sy2_wYxwJOxluUIxg", username = "YeeeeeBoyy", password = "Gr1zzl1es", user_agent = "YeeeeeBot")
+    # !!!!    
+    reddit = praw.Reddit(client_id ="S1vglQgURi0GDQ", client_secret = "lYhIwXcGR8sy2_wYxwJOxluUIxg", username = "YeeeeeBoyy", password = "Gr1zzl1es", user_agent = "YeeeeeBot") # import secrets soon !!!!
 
     subreddit = reddit.subreddit("memes")
-    hot = subreddit.hot(limit = 100)
+    hot = subreddit.hot(limit = 100) # loading first 100 posts from subreddit
 
     @commands.command(description="Get a random piece of content from r/memes",brief="Get a random piece of content from r/memes")
     async def meme(self, ctx):
@@ -20,14 +21,14 @@ class Reddit(commands.Cog):
             hot = subreddit.hot(limit = 100)
             all_subs = []
 
-            for submission in hot:
+            for submission in hot: # putting posts together
                 all_subs.append(submission)
 
-            random_sub = random.choice(all_subs)
+            random_sub = random.choice(all_subs) # getting random post
             name = random_sub.title
             url = random_sub.url
             
-            embed = discord.Embed(colour=0xFF6800)
+            embed = discord.Embed(colour=0xFF6800) # sendign message
             embed.add_field(name=name, value="...", inline=False)
             embed.set_image(url=url)
             embed.set_footer(text="A random piece of content from r/memes")
