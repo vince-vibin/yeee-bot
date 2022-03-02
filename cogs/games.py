@@ -16,14 +16,14 @@ class Games(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(description="Play Rock, Paper, Scissors against your friend replacement.",brief="Play Rock, Paper, Scissors against your friend replacement.")
-    async def rps(self, ctx, user_choice:RockPaperScissorsConverter):
+    @commands.command(description="Play Rock, Paper, Scissors against your friend replacement.",brief="Play Rock, Paper, Scissors against your friend replacement.") # Rock, Paper, Scissors game
+    async def rps(self, ctx, user_choice:RockPaperScissorsConverter): # used controller.py and model.py in rps/
         rps_m = RPS()
-        bot_choice = random.choice(rps_m.get_choices())
+        bot_choice = random.choice(rps_m.get_choices()) # getting random choice form rps/model.py closs RPS
         user_choice = user_choice.choice
 
-        if user_choice is not None:
-            winner_check = {
+        if user_choice is not None: # just magic
+            winner_check = { # compairing choices 
                 (RPS.ROCK, RPS.PAPER): False,
                 (RPS.ROCK, RPS.SCISSOR): False,
                 (RPS.PAPER, RPS.ROCK): True,
@@ -33,20 +33,20 @@ class Games(commands.Cog):
             }
 
             won = None
-            if bot_choice == user_choice:
+            if bot_choice == user_choice: # if choices are the same won = None
                 won = None
             else:
                 won = winner_check[(bot_choice, user_choice)]
 
-            if won is None:
+            if won is None: # sending if choices are the same
                 colour=0xFFFB00
                 titel="Oof"
                 message="Thats a close one, cunt!"
-            elif won is True:
+            elif won is True: # bot has won
                 colour=0xFF0000
                 titel="Hahahaha"
                 message="Your sutch a Noob go cry to your momma"
-            elif won is False:
+            elif won is False: # bot has lost
                 colour=0x13FF00
                 titel="F A C K"
                 message="I am defeated. Now I'm going to cry over there"
@@ -55,8 +55,10 @@ class Games(commands.Cog):
             embed.add_field(name=bot_choice, value=message, inline=False)
             await ctx.send(embed=embed)
 
-    @commands.command(aliases=['hm'], description="Play Hangman against your friend replacement.", brief="Play Hangman against your friend replacement.")
-    async def hangman(self, ctx, guess: str):
+        # send error when user_choice = None
+
+    @commands.command(aliases=['hm'], description="Play Hangman against your friend replacement.", brief="Play Hangman against your friend replacement.") # the hangman game
+    async def hangman(self, ctx, guess: str): # used controller.py and model.py in hangman/ 
         player_id = ctx.author.id
         hangman_instance = HangmanGame()
         game_over, won = hangman_instance.run(player_id, guess)

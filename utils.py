@@ -7,11 +7,6 @@ import queue
 import qrcode
 import image
 
-def mods_or_owner():
-    def predicate(ctx):
-        return commands.check_any(commands.is_owner(), commands.has_role(MODERATOR_ROLE_NAME))
-    return commands.check(predicate)
-
 async def get_yoomum_joke():
     with open(os.path.join(DATA_DIR, "yoomum.json"), encoding='utf-8') as yoomum_file:
         yoomum = json.load(yoomum_file)
