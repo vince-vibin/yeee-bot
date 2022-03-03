@@ -14,7 +14,7 @@ class images(commands.Cog):
     @commands.command(aliases=["pussy", "cat"], description="Meow :heart_eyes_cat:",brief="Meow :heart_eyes_cat:") #sending a random cat pic from random.cat
     async def kitty(self, ctx):
         async with ctx.channel.typing():
-            async with aiohttp.ClientSession()as cs: #making the http-Request
+            async with aiohttp.ClientSession() as cs: #making the http-Request
                 async with cs.get("http://aws.random.cat/meow") as r:
                     data = await r.json()
 
@@ -26,17 +26,24 @@ class images(commands.Cog):
     @commands.command(aliases=["dog"], description="Woof :dog:",brief="Woof :dog:") # sending a random dog pic from random.dog
     async def doggo(self, ctx):
         async with ctx.channel.typing():
-            async with aiohttp.ClientSession()as cs: #making the http-Request
-                async with cs.get("https://random.dog/woof.json") as r:
-                    data = await r.json()
+            gotPic = False
+            while not gotPic:
+                async with aiohttp.ClientSession() as cs: #making the http-Request
+                    async with cs.get("https://random.dog/woof.json") as r:
+                        data = await r.json()
+                        url = data['url']
+                        url = url.lower()
+                        print(url)
 
-                    embed = discord.Embed(colour=0xE6A8FF, title=":dog: Woof :dog:") #sending the message
-                    embed.set_image(url=data['url'])
-                    embed.set_footer(text="Powered by: http://random.dog")
-                    await ctx.send(embed=embed)
+
+                        if url.endswith("jpg") or url.endswith("jpeg"):
+                            gotPic = True
+                            embed = discord.Embed(colour=0xE6A8FF, title=":dog: Woof Woof :dog:") #sending the message
+                            embed.set_image(url=data['url'])
+                            embed.set_footer(text="Powered by: http://random.dog")
+                            await ctx.send(embed=embed)
 
     @commands.command(aliases=["fox"],description="What does the fox say? :fox:",brief="What does the fox say? :fox:") # sending a random  fox pic from randomfox.ca
-
     async def foxxy(self, ctx):
         async with ctx.channel.typing():
             async with aiohttp.ClientSession() as cs: #making the http-Request

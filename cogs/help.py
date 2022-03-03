@@ -46,20 +46,15 @@ class Help(commands.Cog):
         embed.set_footer(text="For help send me an e-mail yeeeeebot@gmail.com or check out my socials.")
         await ctx.send(embed=embed)
 
-    @help.command(name="gamble") # help for gamble.py soon in games.py
-    async def gamble(self, ctx): 
-        embed = discord.Embed(colour=0xC14EB2, title="Help for gamble commands :slot_machine:")
-        embed.add_field(name="roll", value="Get a random number from 1-100. But Whuay?? ```$roll```", inline=True)
-        embed.add_field(name="dice", value="Roll a dice cause you dont have any hobbys. ```$dice```", inline=True)
-        embed.add_field(name="coinflip", value="Just flip a coin (i dont know whuay you would). ```$coinflip/coin```", inline=True)
-        embed.set_footer(text="For help send me an e-mail yeeeeebot@gmail.com or check out my socials.")
-        await ctx.send(embed=embed)
-
     @help.command(name="games") # help for games.py
     async def games(self, ctx):
         embed = discord.Embed(colour=0x00FFEC, title="Help for game commands :video_game:")
         embed.add_field(name="Rock, Paper, Scissors", value="Play Rock, Paper, Scissors against your friend replacement. ```$rps <rock/paper/scissor>```", inline=True)
         embed.add_field(name="hangman", value="Play Hangman against your friend replacement. ```$hm <guess>```", inline=True)
+        embed.set_footer(text="For help send me an e-mail yeeeeebot@gmail.com or check out my socials.")
+        embed.add_field(name="roll", value="Get a random number from 1-100. But Whuay?? ```$roll```", inline=True)
+        embed.add_field(name="dice", value="Roll a dice cause you dont have any hobbys. ```$dice```", inline=True)
+        embed.add_field(name="coinflip", value="Just flip a coin (i dont know whuay you would). ```$coinflip/coin```", inline=True)
         embed.set_footer(text="For help send me an e-mail yeeeeebot@gmail.com or check out my socials.")
         await ctx.send(embed=embed)
 
