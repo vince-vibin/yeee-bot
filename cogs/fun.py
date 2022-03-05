@@ -6,7 +6,6 @@ from utils import get_wisdom
 from utils import get_answers
 
 import qrcode
-import image
 import os
 
 class insults(commands.Cog):
@@ -55,7 +54,7 @@ class insults(commands.Cog):
         img = qr.make_image(fill="black", back_color="white")
         img.save("data/qr_code.png")
 
-        await ctx.send(file=discord.File('data/qr_code.png'))
+        await ctx.send(file=discord.File('data/qr_code.png')) # files can not be send in an Embed :(
 
         os.remove("data/qr_code.png")
 

@@ -43,6 +43,7 @@ class Help(commands.Cog):
         embed.add_field(name="wisdom", value="Smort ```$wisdom/smort```", inline=True)
         embed.add_field(name="yoomum", value="Yoo Mum is! ```$yoomum <member>```", inline=True)
         embed.add_field(name="Magic 8Ball", value="Ask the Ball a question ```$8ball <question>```", inline=True)
+        embed.add_field(name="QR-Code", value="Generate a QR-Code to a link ```$qr <link>```", inline=True)
         embed.set_footer(text="For help send me an e-mail yeeeeebot@gmail.com or check out my socials.")
         await ctx.send(embed=embed)
 
