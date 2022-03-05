@@ -1,8 +1,6 @@
 from discord.ext import commands
 import aiohttp
 import discord
-import random
-import praw
 
 
 

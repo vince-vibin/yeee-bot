@@ -1,3 +1,4 @@
 .env
 /settings_files/_global.py
 __pycache__/
+redditSecrets.py

@@ -55,7 +55,6 @@ class Games(commands.Cog):
             embed.add_field(name=bot_choice, value=message, inline=False)
             await ctx.send(embed=embed)
 
-        # send error when user_choice = None
 
     @commands.command(aliases=['hm'], description="Play Hangman against your friend replacement.", brief="Play Hangman against your friend replacement.") # the hangman game
     async def hangman(self, ctx, guess: str): # used controller.py and model.py in hangman/ 
