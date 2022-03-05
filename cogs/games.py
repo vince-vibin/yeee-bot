@@ -12,6 +12,10 @@ from hangman.controller import HangmanGame
 user_guesses = list()
 hangman_games = {}
 
+# setting global var for Embed-Color
+global colorEmbed 
+colorEmbed = 0xFFFB00
+
 class Games(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -39,15 +43,15 @@ class Games(commands.Cog):
                 won = winner_check[(bot_choice, user_choice)]
 
             if won is None: # sending if choices are the same
-                colour=0xFFFB00
+                colour=colorEmbed
                 titel="Oof"
                 message="Thats a close one, cunt!"
             elif won is True: # bot has won
-                colour=0xFF0000
+                colour=colorEmbed
                 titel="Hahahaha"
                 message="Your sutch a Noob go cry to your momma"
             elif won is False: # bot has lost
-                colour=0x13FF00
+                colour=colorEmbed
                 titel="F A C K"
                 message="I am defeated. Now I'm going to cry over there"
 
@@ -63,11 +67,11 @@ class Games(commands.Cog):
         game_over, won = hangman_instance.run(player_id, guess)
 
         if game_over:
-            colour=0xFF0000
+            colour=colorEmbed
             titel="Hahahahahahah, you fucking lost"
             game_over_message = "You fucking shit. You wont reach anything in your life."
             if won:
-                colour=0x13FF00
+                colour=colorEmbed
                 titel="Hey look at that!"
                 game_over_message = "You just reached something in your life congrats."
 
@@ -76,13 +80,13 @@ class Games(commands.Cog):
 
             await hangman_instance.reset(player_id)
             
-            embed = discord.Embed(colour=colour)
+            embed = discord.Embed(colour=colorEmbed)
             embed.add_field(name=titel, value=game_over_message, inline=False)
             await ctx.send(embed=embed)
 
         else:
             colour=0x00FFEC
-            embed = discord.Embed(colour=colour)
+            embed = discord.Embed(colour=colorEmbed)
             embed.add_field(name="Progress:", value=hangman_instance.get_progress_string(), inline=False)
             embed.add_field(name="Guesses so far:", value=hangman_instance.get_guess_string(), inline=False)
             await ctx.send(embed=embed)
@@ -92,7 +96,7 @@ class Games(commands.Cog):
         n = random.randrange(1,101)
 
         colour=0xC14EB2
-        embed = discord.Embed(colour=colour)
+        embed = discord.Embed(colour=colorEmbed)
         embed.add_field(name="Congratulations you got a:", value=n, inline=False)
         embed.set_footer(text="Now move on with your live and get hobbys.")
         await ctx.send(embed=embed)
@@ -102,7 +106,7 @@ class Games(commands.Cog):
         n = random.randrange(1, 6)
         
         colour=0xC14EB2
-        embed = discord.Embed(colour=colour)
+        embed = discord.Embed(colour=colorEmbed)
         embed.add_field(name="You rolled a:", value=n, inline=False)
         embed.set_footer(text="Now move on with your live and get hobbys.")
         await ctx.send(embed=embed)
@@ -112,7 +116,7 @@ class Games(commands.Cog):
         n = random.choice(('Heads', 'Tails'))
         
         colour=0xC14EB2
-        embed = discord.Embed(colour=colour)
+        embed = discord.Embed(colour=colorEmbed)
         embed.add_field(name="You got:", value=n, inline=False)
         embed.set_footer(text="Now move on with your live and get hobbys.")
         await ctx.send(embed=embed)

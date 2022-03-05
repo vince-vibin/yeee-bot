@@ -1,6 +1,10 @@
 from discord.ext import commands
 import discord
 
+# setting global var for Embed-Color
+global colorEmbed 
+colorEmbed = 0x94FFB4
+
 class Basic(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -8,7 +12,7 @@ class Basic(commands.Cog):
     @commands.Cog.listener() # defining the error message
     async def on_command_error(self, ctx, ex):
         print(ex)
-        colour=0xFF0000
+        colour=0xFF0000 # color for the error message
 
         embed = discord.Embed(colour=colour)
         embed.add_field(name="Bruh", value="It seems like you are to dumb to use this command so please leave me alone.", inline=False)
@@ -17,32 +21,28 @@ class Basic(commands.Cog):
 
     @commands.command(description="*Happy Table-Tennis noises*",brief="*Happy Table-Tennis noises*") # getting the ping of the bot
     async def ping(self, ctx):
-        colour=0x94FFB4
 
-        embed = discord.Embed(colour=colour)
+        embed = discord.Embed(colour=colorEmbed)
         embed.add_field(name="Pong you Dumb!", value=format(round(self.bot.latency * 1000)), inline=False)
         await ctx.send(embed=embed)
 
     @commands.command(description="Something you want the bot to say. Cause youre too afraid to.",brief="Something you want the bot to say. Cause youre to afraid to say it.") # the bot is saying a profided string
     async def say(self, ctx, *args):
         if len(args) > 0:
-            colour=0x94FFB4
 
-            embed = discord.Embed(colour=colour)
+            embed = discord.Embed(colour=colorEmbed)
             embed.add_field(name="Quote:", value=" ".join(args), inline=False)
             await ctx.send(embed=embed)
         else:
-            colour=0xFF0000
 
-            embed = discord.Embed(colour=colour)
+            embed = discord.Embed(colour=colorEmbed)
             embed.add_field(name="Bruh", value="You need to add a argument you Dumbass", inline=False)
             await ctx.send(embed=embed)
 
     @commands.command(description="Get info about the life of YeeeeeBot",brief="Get info about the life of YeeeeeBot") # get info about the bot
     async def botinfo(self, ctx):
-        colour=0x94FFB4
 
-        embed = discord.Embed(colour=colour, title="About YeeeeeBot")
+        embed = discord.Embed(colour=colorEmbed, title="About YeeeeeBot")
         embed.add_field(name="Servers active:", value=len(self.bot.guilds), inline=False)
         embed.add_field(name="Developer/Dad :desktop:", value="YeeeeeBoi", inline=True)
         await ctx.send(embed=embed)
@@ -50,7 +50,7 @@ class Basic(commands.Cog):
     @commands.command(description="Get server status",brief="Get server status") # get info about the server
     async def serverinfo(self, ctx, *args):
         guild = ctx.guild
-        embed = discord.Embed(colour=0xA8FFD5)
+        embed = discord.Embed(colour=colorEmbed)
         numb_voicechannels = len(guild.voice_channels)
         numb_textchannels = len(guild.text_channels)
         numb_member = len(guild.members)

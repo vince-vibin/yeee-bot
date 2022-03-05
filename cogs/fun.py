@@ -8,6 +8,10 @@ from utils import get_answers
 import qrcode
 import os
 
+# setting global var for Embed-Color
+global colorEmbed 
+colorEmbed = 0x60C14E
+
 class insults(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -16,29 +20,27 @@ class insults(commands.Cog):
     async def yoomum(self, ctx, member: discord.Member = None):
         yoomum = await get_yoomum_joke()
         if member is not None:
-            embed = discord.Embed(colour=0x60C14E)
+            embed = discord.Embed(colour=colorEmbed)
             embed.add_field(name=member.name, value=yoomum, inline=False)
             await ctx.send(embed=embed)
         else:
-            embed = discord.Embed(colour=0x60C14E)
+            embed = discord.Embed(colour=colorEmbed)
             embed.add_field(name="To make you fell better", value=yoomum, inline=False)
             await ctx.send(embed=embed)
     
     @commands.command(aliases=['wisdom'], brief="Smort") # getting a random wisdom from data/weisheiten.json
     async def smort(self, ctx,):
         wisdom = await get_wisdom()
-        colour = 0x60C14E
-        
-        embed = discord.Embed(colour=colour)
+
+        embed = discord.Embed(colour=colorEmbed)
         embed.add_field(name=wisdom, value="This wisdom i learned from my dad/developer YeeeeeBoi", inline=False)
         await ctx.send(embed=embed)
 
     @commands.command(aliases=['ball', 'mb', '8ball'], brief="Magic 8Ball") # getting a random answer from data/8ball.json
     async def magicball(self, ctx, *question):
         answers = await get_answers()
-        colour = 0x60C14E
         
-        embed = discord.Embed(colour=colour)
+        embed = discord.Embed(colour=colorEmbed)
         embed.add_field(name=answers, value="The ball has spoken", inline=False)
         embed.set_footer(text="Just like my balls if you know what i mean")
         await ctx.send(embed=embed)

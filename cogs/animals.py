@@ -1,7 +1,11 @@
+from turtle import color
 from discord.ext import commands
 import aiohttp
 import discord
 
+# setting global var for Embed-Color
+global colorEmbed 
+colorEmbed = 0xE6A8FF
 
 
 class images(commands.Cog):
@@ -16,7 +20,7 @@ class images(commands.Cog):
                 async with cs.get("http://aws.random.cat/meow") as r:
                     data = await r.json()
 
-                    embed = discord.Embed(colour=0xE6A8FF, title=":heart_eyes_cat: Meow :heart_eyes_cat: ") #sending the message
+                    embed = discord.Embed(colour=colorEmbed, title=":heart_eyes_cat: Meow :heart_eyes_cat: ") #sending the message
                     embed.set_image(url=data['file'])
                     embed.set_footer(text="Powered by: http://random.cat")
                     await ctx.send(embed=embed)
@@ -31,12 +35,11 @@ class images(commands.Cog):
                         data = await r.json()
                         url = data['url']
                         url = url.lower()
-                        print(url)
 
 
                         if url.endswith("jpg") or url.endswith("jpeg"):
                             gotPic = True
-                            embed = discord.Embed(colour=0xE6A8FF, title=":dog: Woof Woof :dog:") #sending the message
+                            embed = discord.Embed(colour=colorEmbed, title=":dog: Woof Woof :dog:") #sending the message
                             embed.set_image(url=data['url'])
                             embed.set_footer(text="Powered by: http://random.dog")
                             await ctx.send(embed=embed)
@@ -48,7 +51,7 @@ class images(commands.Cog):
                 async with cs.get("https://randomfox.ca/floof/") as r:
                     data = await r.json()
 
-                    embed = discord.Embed(colour=0xE6A8FF, title="Seriosly, what does the fox say?? :fox:") #sending the message
+                    embed = discord.Embed(colour=colorEmbed, title="Seriosly, what does the fox say?? :fox:") #sending the message
                     embed.set_image(url=data['image'])
                     embed.set_footer(text="Powered by: https://randomfox.ca/")
 
@@ -61,7 +64,7 @@ class images(commands.Cog):
                 async with cs.get("https://random-d.uk/api/random") as r:
                     data = await r.json()
 
-                    embed = discord.Embed(colour=0xE6A8FF, title="Quickidi quackidi your love is now my property!") #sending the message
+                    embed = discord.Embed(colour=colorEmbed, title="Quickidi quackidi your love is now my property!") #sending the message
                     embed.set_image(url=data['url'])
                     embed.set_footer(text="Powered by: https://random-d.uk")
 

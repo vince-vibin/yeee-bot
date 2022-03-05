@@ -4,6 +4,10 @@ import discord
 import random
 from .redditSecrets import redditSecrets;
 
+# setting global var for Embed-Color
+global colorEmbed 
+colorEmbed = 0xFF6800
+
 class Reddit(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -22,7 +26,6 @@ class Reddit(commands.Cog):
     @commands.command(description="Get a random piece of content from r/memes",brief="Get a random piece of content from r/memes")
     async def meme(self, ctx):
         async with ctx.channel.typing():
-            print (clientID, clientSecret, username, password)
             reddit = praw.Reddit(client_id = clientID, client_secret = clientSecret, username = username, password = password, user_agent = userAgent)
             subreddit = reddit.subreddit("memes")
             hot = subreddit.hot(limit = 100)
@@ -35,7 +38,7 @@ class Reddit(commands.Cog):
             name = random_sub.title
             url = random_sub.url
             
-            embed = discord.Embed(colour=0xFF6800) # sendign message
+            embed = discord.Embed(colour=colorEmbed) # sendign message
             embed.add_field(name=name, value="...", inline=False)
             embed.set_image(url=url)
             embed.set_footer(text="A random piece of content from r/memes")
@@ -58,7 +61,7 @@ class Reddit(commands.Cog):
             name = random_sub.title
             url = random_sub.url
             
-            embed = discord.Embed(colour=0xFF6800)
+            embed = discord.Embed(colour=colorEmbed)
             embed.add_field(name=name, value="...", inline=False)
             embed.set_image(url=url)
             embed.set_footer(text="A random piece of content from r/CrackheadCraigslist")
@@ -81,7 +84,7 @@ class Reddit(commands.Cog):
             name = random_sub.title
             url = random_sub.url
             
-            embed = discord.Embed(colour=0xFF6800)
+            embed = discord.Embed(colour=colorEmbed)
             embed.add_field(name=name, value="...", inline=False)
             embed.set_image(url=url)
             embed.set_footer(text="A random piece of content from r/hmm")
@@ -104,7 +107,7 @@ class Reddit(commands.Cog):
             name = random_sub.title
             url = random_sub.url
             
-            embed = discord.Embed(colour=0xFF6800)
+            embed = discord.Embed(colour=colorEmbed)
             embed.add_field(name=name, value="...", inline=False)
             embed.set_image(url=url)
             embed.set_footer(text="A random piece of content from r/im14andthisisdeep")
@@ -127,7 +130,7 @@ class Reddit(commands.Cog):
             name = random_sub.title
             url = random_sub.url
             
-            embed = discord.Embed(colour=0xFF6800)
+            embed = discord.Embed(colour=colorEmbed)
             embed.add_field(name=name, value="...", inline=False)
             embed.set_image(url=url)
             embed.set_footer(text="A random piece of content from r/wholesomememes")
@@ -150,7 +153,7 @@ class Reddit(commands.Cog):
             name = random_sub.title
             url = random_sub.url
             
-            embed = discord.Embed(colour=0xFF6800)
+            embed = discord.Embed(colour=colorEmbed)
             embed.add_field(name=name, value="...", inline=False)
             embed.set_image(url=url)
             embed.set_footer(text="A random piece of content from r/technicallythetruth")
@@ -173,7 +176,7 @@ class Reddit(commands.Cog):
             name = random_sub.title
             url = random_sub.url
             
-            embed = discord.Embed(colour=0xFF6800)
+            embed = discord.Embed(colour=colorEmbed)
             embed.add_field(name=name, value="...", inline=False)
             embed.set_image(url=url)
             embed.set_footer(text="A random piece of content from r/stockphotos")
@@ -196,7 +199,7 @@ class Reddit(commands.Cog):
             name = random_sub.title
             url = random_sub.url
             
-            embed = discord.Embed(colour=0xFF6800)
+            embed = discord.Embed(colour=colorEmbed)
             embed.add_field(name=name, value="...", inline=False)
             embed.set_image(url=url)
             embed.set_footer(text="A random piece of content from r/softwaregore")
@@ -219,7 +222,7 @@ class Reddit(commands.Cog):
             name = random_sub.title
             url = random_sub.url
             
-            embed = discord.Embed(colour=0xFF6800)
+            embed = discord.Embed(colour=colorEmbed)
             embed.add_field(name=name, value="...", inline=False)
             embed.set_image(url=url)
             embed.set_footer(text="A random piece of content from r/facepalm")
