@@ -67,11 +67,9 @@ class Games(commands.Cog):
         game_over, won = hangman_instance.run(player_id, guess)
 
         if game_over:
-            colour=colorEmbed
             titel="Hahahahahahah, you fucking lost"
             game_over_message = "You fucking shit. You wont reach anything in your life."
             if won:
-                colour=colorEmbed
                 titel="Hey look at that!"
                 game_over_message = "You just reached something in your life congrats."
 
@@ -85,41 +83,93 @@ class Games(commands.Cog):
             await ctx.send(embed=embed)
 
         else:
-            colour=0x00FFEC
             embed = discord.Embed(colour=colorEmbed)
             embed.add_field(name="Progress:", value=hangman_instance.get_progress_string(), inline=False)
             embed.add_field(name="Guesses so far:", value=hangman_instance.get_guess_string(), inline=False)
             await ctx.send(embed=embed)
     
     @commands.command(description="Get a random number from 1-100. But Whuay??",brief="Get a random number from 1-100. But Whuay??")
-    async def roll(self, ctx):
-        n = random.randrange(1,101)
-
-        colour=0xC14EB2
-        embed = discord.Embed(colour=colorEmbed)
-        embed.add_field(name="Congratulations you got a:", value=n, inline=False)
-        embed.set_footer(text="Now move on with your live and get hobbys.")
-        await ctx.send(embed=embed)
+    async def roll(self, ctx, range: int, bet: int):
+        if range > 1:
+            if bet < range: 
+                n = random.randrange(1, range)
+                if bet == range: 
+                    embed = discord.Embed(colour=colorEmbed)
+                    embed.add_field(name="You got: ", value=n, inline=True)
+                    embed.add_field(name="From a range between 1 and : ", value=range, inline=True)
+                    embed.add_field(name="Your bet was: ", value=bet, inline=True)
+                    embed.add_field(name="Conclusion: ", value="You fucking did it you finally achieved something in your life", inline=False)
+                    embed.set_footer(text="Now move on with your live and get hobbys.")
+                    await ctx.send(embed=embed)
+                else: 
+                    embed = discord.Embed(colour=colorEmbed)
+                    embed.add_field(name="You got: ", value=n, inline=True)
+                    embed.add_field(name="From a range from 1 to: ", value=range, inline=True)
+                    embed.add_field(name="Your bet was: ", value=bet, inline=True)
+                    embed.add_field(name="Conclusion: ", value="You're a loser. And will have gambeling issues in your life", inline=False)
+                    embed.set_footer(text="Now move on with your live and get hobbys.")
+                    await ctx.send(embed=embed)
+            else:
+                embed = discord.Embed(colour=colorEmbed)
+                embed.add_field(name="Idiot", value="Your bet cant be higher then your range. OBVIOSLY ", inline=False)
+                embed.set_footer(text="Try again")
+                await ctx.send(embed=embed)
+        else:
+            embed = discord.Embed(colour=colorEmbed)
+            embed.add_field(name="Idiot", value="Range has to be higher then 1. OBVIOSLY ", inline=False)
+            embed.set_footer(text="Try again")
+            await ctx.send(embed=embed)
 
     @commands.command(description="Roll a dice cause you dont have any hobbys.",brief="Roll a dice cause you dont have any hobbys.")
-    async def dice(self, ctx):
+    async def dice(self, ctx, bet: int):
         n = random.randrange(1, 6)
-        
-        colour=0xC14EB2
-        embed = discord.Embed(colour=colorEmbed)
-        embed.add_field(name="You rolled a:", value=n, inline=False)
-        embed.set_footer(text="Now move on with your live and get hobbys.")
-        await ctx.send(embed=embed)
+        if bet != None:
+            if bet > 6:
+                embed = discord.Embed(colour=colorEmbed)
+                embed.add_field(name="Idiot", value="Your bet cant be higher then your 6. OBVIOSLY ", inline=False)
+                embed.set_footer(text="Try again")
+                await ctx.send(embed=embed)
+            else:
+                if n == bet:
+                    embed = discord.Embed(colour=colorEmbed)
+                    embed.add_field(name="You got: ", value=n, inline=True)
+                    embed.add_field(name="Your bet was: ", value=bet, inline=True)
+                    embed.add_field(name="Conclusion: ", value="You fucking did it you finally achieved something in your life", inline=False)
+                    embed.set_footer(text="Now move on with your live and get hobbys.")
+                    await ctx.send(embed=embed)
+                else:
+                    embed = discord.Embed(colour=colorEmbed)
+                    embed.add_field(name="You got: ", value=n, inline=True)
+                    embed.add_field(name="Your bet was: ", value=bet, inline=True)
+                    embed.add_field(name="Conclusion: ", value="You're a loser. And will have gambeling issues in your life", inline=False)
+                    embed.set_footer(text="Now move on with your live and get hobbys.")
+                    await ctx.send(embed=embed)
+        else:
+            embed = discord.Embed(colour=colorEmbed)
+            embed.add_field(name="You rolled a:", value=n, inline=False)
+            embed.set_footer(text="Now move on with your live and get hobbys.")
+            await ctx.send(embed=embed)
 
     @commands.command(aliases=['coin'], description="Just flip a coin (i dont know whuay you would).",brief="Just flip a coin (i dont know whuay you would).")
-    async def coinflip(self, ctx):
-        n = random.choice(('Heads', 'Tails'))
-        
-        colour=0xC14EB2
-        embed = discord.Embed(colour=colorEmbed)
-        embed.add_field(name="You got:", value=n, inline=False)
-        embed.set_footer(text="Now move on with your live and get hobbys.")
-        await ctx.send(embed=embed)
+    async def coinflip(self, ctx, bet):
+        if bet.lower() == "heads" or bet.lower() == "tails":
+            side = random.choice(('heads', 'tails'))
+            
+            if side == bet:
+                embed = discord.Embed(colour=colorEmbed)
+                embed.add_field(name=side, value="You fucking did it you finally achieved something in your life", inline=False)
+                embed.set_footer(text="Now move on with your live and get hobbys.")
+                await ctx.send(embed=embed)
+            else:
+                embed = discord.Embed(colour=colorEmbed)
+                embed.add_field(name="You flipped: " + side, value="You're a loser. And will have gambeling issues in your life", inline=False)
+                embed.set_footer(text="Now move on with your live and get hobbys.")
+                await ctx.send(embed=embed)
+        else:
+            embed = discord.Embed(colour=colorEmbed)
+            embed.add_field(name="Idiot", value="You have to bet on heads or tails", inline=False)
+            embed.set_footer(text="Try again")
+            await ctx.send(embed=embed)
     
 def setup(bot):
     bot.add_cog(Games(bot))
