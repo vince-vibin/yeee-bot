@@ -93,7 +93,7 @@ class Games(commands.Cog):
         if range > 1:
             if bet < range: 
                 n = random.randrange(1, range)
-                if bet == range: 
+                if bet == n: 
                     embed = discord.Embed(colour=colorEmbed)
                     embed.add_field(name="You got: ", value=n, inline=True)
                     embed.add_field(name="From a range between 1 and : ", value=range, inline=True)

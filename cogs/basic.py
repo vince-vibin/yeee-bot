@@ -1,6 +1,9 @@
 from discord.ext import commands
 import discord
 
+from influx.influxdb import sending
+
+
 # setting global var for Embed-Color
 global colorEmbed 
 colorEmbed = 0x94FFB4
@@ -21,6 +24,7 @@ class Basic(commands.Cog):
 
     @commands.command(description="*Happy Table-Tennis noises*",brief="*Happy Table-Tennis noises*") # getting the ping of the bot
     async def ping(self, ctx):
+        sending(39287423)
 
         embed = discord.Embed(colour=colorEmbed)
         embed.add_field(name="Pong you Dumb!", value=format(round(self.bot.latency * 1000)), inline=False)
