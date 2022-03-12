@@ -71,26 +71,18 @@ class Basic(commands.Cog):
         embed = discord.Embed(colour=colorEmbed)
         numb_voicechannels = len(guild.voice_channels)
         numb_textchannels = len(guild.text_channels)
-        numb_member = len(guild.members)
+        numb_member = (guild.member_count)
         owner = (guild.owner)
         server_icon = ctx.guild.icon_url
-        server_region = (guild.region)
         description = (guild.description)
-        max_members = (guild.max_members)
-        system_channel = (guild.system_channel)
-        rules_channel = (guild.rules_channel)
-        afk_channel = (guild.afk_channel)
 
         embed.set_thumbnail(url=server_icon)
         embed.add_field(name="Server Name", value=guild.name, inline=False)
-        embed.add_field(name="Region", value=server_region)
+        embed.add_field(name="Description", value=description)
         embed.add_field(name="Owner", value=owner, inline=False)
+        embed.add_field(name="Member Count", value=numb_member, inline=False)
         embed.add_field(name="Voice Channels", value=numb_voicechannels, inline=True)
-        embed.add_field(name="Text Channels", value=numb_textchannels, inline=False)
-        embed.add_field(name="System Channel", value=system_channel)
-        embed.add_field(name="Rules Channel", value=rules_channel)
-        embed.add_field(name="AFK Channel", value=afk_channel)
-        embed.add_field(inline=False, name="Member Count", value=numb_member)
+        embed.add_field(name="Text Channels", value=numb_textchannels, inline=True)
             
         emoji_string = ""
         for e in guild.emojis:
@@ -98,7 +90,6 @@ class Basic(commands.Cog):
                 emoji_string += str(e)
         embed.add_field(name="Emojies",
                         value=emoji_string or "No emojis setup", inline=False)
-
 
         await ctx.send(embed=embed)        
 
