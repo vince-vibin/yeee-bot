@@ -1,12 +1,20 @@
 from discord.ext import commands
 import discord
 
-from influx.influxdb import sending
+from influx.influxdb import sendingCom
 
 
 # setting global var for Embed-Color
 global colorEmbed 
 colorEmbed = 0x94FFB4
+
+#vars for calling sending func
+global cog
+
+cog = "basic"
+calledPing = 0
+calledBotinfo = 0
+calledServerinfo = 0
 
 class Basic(commands.Cog):
     def __init__(self, bot):
@@ -24,27 +32,26 @@ class Basic(commands.Cog):
 
     @commands.command(description="*Happy Table-Tennis noises*",brief="*Happy Table-Tennis noises*") # getting the ping of the bot
     async def ping(self, ctx):
-        sending(39287423)
+        
+        #sending calledNUM Metric to influxdb.py
+        global calledPing
+        calledPing += 1
+        com = "ping"
+        sendingCom(cog, com, calledPing)
 
         embed = discord.Embed(colour=colorEmbed)
         embed.add_field(name="Pong you Dumb!", value=format(round(self.bot.latency * 1000)), inline=False)
         await ctx.send(embed=embed)
 
-    @commands.command(description="Something you want the bot to say. Cause youre too afraid to.",brief="Something you want the bot to say. Cause youre to afraid to say it.") # the bot is saying a profided string
-    async def say(self, ctx, *args):
-        if len(args) > 0:
-
-            embed = discord.Embed(colour=colorEmbed)
-            embed.add_field(name="Quote:", value=" ".join(args), inline=False)
-            await ctx.send(embed=embed)
-        else:
-
-            embed = discord.Embed(colour=colorEmbed)
-            embed.add_field(name="Bruh", value="You need to add a argument you Dumbass", inline=False)
-            await ctx.send(embed=embed)
-
     @commands.command(description="Get info about the life of YeeeeeBot",brief="Get info about the life of YeeeeeBot") # get info about the bot
     async def botinfo(self, ctx):
+        
+        #sending calledNUM Metric to influxdb.py
+        global calledBotinfo
+        calledBotinfo += 1
+        com = "botinfo"
+        sendingCom(cog, com, calledBotinfo)
+
 
         embed = discord.Embed(colour=colorEmbed, title="About YeeeeeBot")
         embed.add_field(name="Servers active:", value=len(self.bot.guilds), inline=False)
@@ -52,7 +59,14 @@ class Basic(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command(description="Get server status",brief="Get server status") # get info about the server
-    async def serverinfo(self, ctx, *args):
+    async def serverinfo(self, ctx):
+
+        #sending calledNUM Metric to influxdb.py
+        global calledServerinfo
+        calledServerinfo += 1
+        com = "serverinfo"
+        sendingCom(cog, com, calledServerinfo)
+
         guild = ctx.guild
         embed = discord.Embed(colour=colorEmbed)
         numb_voicechannels = len(guild.voice_channels)
