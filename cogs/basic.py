@@ -1,7 +1,7 @@
-from discord.ext import commands
+from discord.ext import commands, tasks
 import discord
 
-from influx.influxdb import sendingCom
+from influx.influxdb import sendingCom, sendingH
 
 
 # setting global var for Embed-Color
@@ -16,9 +16,15 @@ calledPing = 0
 calledBotinfo = 0
 calledServerinfo = 0
 
+calledPingH = [0, "ping", cog] 
+calledBotinfoH = [0, "serverinfo", cog]
+calledServerinfoH = [0, "botinfo", cog]
+
+
 class Basic(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+
 
     @commands.Cog.listener() # defining the error message
     async def on_command_error(self, ctx, ex):
@@ -32,11 +38,14 @@ class Basic(commands.Cog):
 
     @commands.command(description="*Happy Table-Tennis noises*",brief="*Happy Table-Tennis noises*") # getting the ping of the bot
     async def ping(self, ctx):
-        
-        #sending calledNUM Metric to influxdb.py
-        global calledPing
-        calledPing += 1
         com = "ping"
+        #sending calledNUM Metric to influxdb.py
+        global calledPing, calledPingH
+        calledPing += 1
+
+        #setting for called per hour
+        calledPingH[0] += 1
+
         sendingCom(cog, com, calledPing)
 
         embed = discord.Embed(colour=colorEmbed)
@@ -45,13 +54,16 @@ class Basic(commands.Cog):
 
     @commands.command(description="Get info about the life of YeeeeeBot",brief="Get info about the life of YeeeeeBot") # get info about the bot
     async def botinfo(self, ctx):
+        com = "botinfo"
         
         #sending calledNUM Metric to influxdb.py
-        global calledBotinfo
+        global calledBotinfo, calledBotinfoH
         calledBotinfo += 1
-        com = "botinfo"
-        sendingCom(cog, com, calledBotinfo)
 
+        #setting for called per hour
+        calledBotinfoH[0] += 1
+
+        sendingCom(cog, com, calledBotinfo)
 
         embed = discord.Embed(colour=colorEmbed, title="About YeeeeeBot")
         embed.add_field(name="Servers active:", value=len(self.bot.guilds), inline=False)
@@ -59,12 +71,16 @@ class Basic(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command(description="Get server status",brief="Get server status") # get info about the server
-    async def serverinfo(self, ctx):
+    async def serverinfo(self, ctx): #! Command raised an exception: TypeError: 'int' object is not iterable TODO
+        com = "serverinfo"
 
         #sending calledNUM Metric to influxdb.py
-        global calledServerinfo
+        global calledServerinfo, calledServerinfoH
         calledServerinfo += 1
-        com = "serverinfo"
+
+        #setting for called per hour
+        calledServerinfoH[0] += 1
+
         sendingCom(cog, com, calledServerinfo)
 
         guild = ctx.guild
@@ -91,8 +107,33 @@ class Basic(commands.Cog):
         embed.add_field(name="Emojies",
                         value=emoji_string or "No emojis setup", inline=False)
 
-        await ctx.send(embed=embed)        
+        await ctx.send(embed=embed)
 
+#   def exporterH(): #exporting hourly to influxdb.py
+ #       global calledPingH, calledBotinfoH, calledServerinfoH
+  #      
+   #     sendingH(calledPingH)
+    #    sendingH(calledBotinfoH)
+     #   sendingH(calledServerinfoH)
+      #  sleep(5)
+    
+   # threading.Timer(5.0, sendingH).start()
+    #exporterH()
 
+#    while True:
+  #      global calledPingH, calledBotinfoH, calledServerinfoH
+  #      
+ #       sendingH(calledPingH)
+ #       sendingH(calledBotinfoH)
+  #      sendingH(calledServerinfoH)
+  #      sleep(20)
+
+    @tasks.loop(seconds=10)
+    async def exporterH():
+        sendingH(calledPingH)
+        sendingH(calledBotinfoH)
+        sendingH(calledServerinfoH)
+
+    exporterH.start()
 def setup(bot):
     bot.add_cog(Basic(bot))

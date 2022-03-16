@@ -7,6 +7,16 @@ import discord
 global colorEmbed 
 colorEmbed = 0xE6A8FF
 
+#vars for calling sending func
+from influx.influxdb import sendingCom, sendingH
+global cog
+
+cog = "animals"
+calledKitty = 0
+calledDoggo = 0
+calledFoxxy = 0
+calledDuccy = 0
+
 
 class images(commands.Cog):
     def __init__(self, bot):
@@ -16,9 +26,16 @@ class images(commands.Cog):
     @commands.command(aliases=["pussy", "cat"], description="Meow :heart_eyes_cat:",brief="Meow :heart_eyes_cat:") #sending a random cat pic from random.cat
     async def kitty(self, ctx):
         async with ctx.channel.typing():
+
             async with aiohttp.ClientSession() as cs: #making the http-Request
                 async with cs.get("http://aws.random.cat/meow") as r:
                     data = await r.json()
+
+                    #sending calledNUM Metric to influxdb.py
+                    global calledKitty
+                    calledKitty += 1
+                    com = "kitty"
+                    sendingCom(cog, com, calledKitty)
 
                     embed = discord.Embed(colour=colorEmbed, title=":heart_eyes_cat: Meow :heart_eyes_cat: ") #sending the message
                     embed.set_image(url=data['file'])
@@ -39,6 +56,12 @@ class images(commands.Cog):
 
                         if url.endswith("jpg") or url.endswith("jpeg"):
                             gotPic = True
+
+                            global calledDoggo
+                            calledDoggo += 1
+                            com = "doggo"
+                            sendingCom(cog, com, calledDoggo)
+
                             embed = discord.Embed(colour=colorEmbed, title=":dog: Woof Woof :dog:") #sending the message
                             embed.set_image(url=data['url'])
                             embed.set_footer(text="Powered by: http://random.dog")
@@ -50,6 +73,11 @@ class images(commands.Cog):
             async with aiohttp.ClientSession() as cs: #making the http-Request
                 async with cs.get("https://randomfox.ca/floof/") as r:
                     data = await r.json()
+
+                    global calledFoxxy
+                    calledFoxxy += 1
+                    com = "foxxy"
+                    sendingCom(cog, com, calledFoxxy)
 
                     embed = discord.Embed(colour=colorEmbed, title="Seriosly, what does the fox say?? :fox:") #sending the message
                     embed.set_image(url=data['image'])
@@ -63,6 +91,11 @@ class images(commands.Cog):
             async with aiohttp.ClientSession() as cs: #making the http-Request
                 async with cs.get("https://random-d.uk/api/random") as r:
                     data = await r.json()
+
+                    global calledDuccy
+                    calledDuccy += 1
+                    com = "duccy"
+                    sendingCom(cog, com, calledDuccy)
 
                     embed = discord.Embed(colour=colorEmbed, title="Quickidi quackidi your love is now my property!") #sending the message
                     embed.set_image(url=data['url'])

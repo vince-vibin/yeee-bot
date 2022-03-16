@@ -1,4 +1,4 @@
-from discord.ext import commands
+from discord.ext import commands,tasks
 import os
 from settings import *
 import discord
@@ -17,6 +17,5 @@ async def on_ready():
 for filename in os.listdir("./cogs"):
     if filename.endswith(".py") and filename != "__init__.py" and filename != "redditSecrets.py":
         bot.load_extension(f'cogs.{filename[:-3]}')
-
 
 bot.run(TOKEN)
