@@ -71,7 +71,7 @@ class Basic(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command(description="Get server status",brief="Get server status") # get info about the server
-    async def serverinfo(self, ctx): #! Command raised an exception: TypeError: 'int' object is not iterable TODO
+    async def serverinfo(self, ctx):
         com = "serverinfo"
 
         #sending calledNUM Metric to influxdb.py
@@ -109,31 +109,20 @@ class Basic(commands.Cog):
 
         await ctx.send(embed=embed)
 
-#   def exporterH(): #exporting hourly to influxdb.py
- #       global calledPingH, calledBotinfoH, calledServerinfoH
-  #      
-   #     sendingH(calledPingH)
-    #    sendingH(calledBotinfoH)
-     #   sendingH(calledServerinfoH)
-      #  sleep(5)
-    
-   # threading.Timer(5.0, sendingH).start()
-    #exporterH()
-
-#    while True:
-  #      global calledPingH, calledBotinfoH, calledServerinfoH
-  #      
- #       sendingH(calledPingH)
- #       sendingH(calledBotinfoH)
-  #      sendingH(calledServerinfoH)
-  #      sleep(20)
-
-    @tasks.loop(seconds=10)
+    @tasks.loop(minutes=1)
     async def exporterH():
-        sendingH(calledPingH)
-        sendingH(calledBotinfoH)
-        sendingH(calledServerinfoH)
+        global calledPingH, calledBotinfoH, calledServerinfoH
+        send = [calledPingH, calledBotinfoH, calledServerinfoH]
+        i = 0
 
+        while i < len(send): #looping throught send array
+            sendingH(send[i])
+            i = i + 1
+
+        calledPingH[0] = 0 #reseting all values 
+        calledBotinfoH[0] = 0
+        calledServerinfoH[0] = 0
+        
     exporterH.start()
 def setup(bot):
     bot.add_cog(Basic(bot))

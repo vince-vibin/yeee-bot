@@ -1,5 +1,4 @@
-from turtle import color
-from discord.ext import commands
+from discord.ext import commands, tasks
 import aiohttp
 import discord
 
@@ -17,6 +16,10 @@ calledDoggo = 0
 calledFoxxy = 0
 calledDuccy = 0
 
+calledKittyH = [0, "kitty", cog] 
+calledDoggoH = [0, "doggo", cog]
+calledFoxxyH = [0, "foxxy", cog]
+calledDuccyH = [0, "duccy", cog]
 
 class images(commands.Cog):
     def __init__(self, bot):
@@ -32,9 +35,10 @@ class images(commands.Cog):
                     data = await r.json()
 
                     #sending calledNUM Metric to influxdb.py
-                    global calledKitty
+                    global calledKitty, calledKittyH
                     calledKitty += 1
                     com = "kitty"
+                    calledKittyH[0] += 1
                     sendingCom(cog, com, calledKitty)
 
                     embed = discord.Embed(colour=colorEmbed, title=":heart_eyes_cat: Meow :heart_eyes_cat: ") #sending the message
@@ -57,9 +61,10 @@ class images(commands.Cog):
                         if url.endswith("jpg") or url.endswith("jpeg"):
                             gotPic = True
 
-                            global calledDoggo
+                            global calledDoggo, calledDoggoH
                             calledDoggo += 1
                             com = "doggo"
+                            calledDoggoH[0] += 1
                             sendingCom(cog, com, calledDoggo)
 
                             embed = discord.Embed(colour=colorEmbed, title=":dog: Woof Woof :dog:") #sending the message
@@ -74,9 +79,10 @@ class images(commands.Cog):
                 async with cs.get("https://randomfox.ca/floof/") as r:
                     data = await r.json()
 
-                    global calledFoxxy
+                    global calledFoxxy, calledFoxxyH
                     calledFoxxy += 1
                     com = "foxxy"
+                    calledFoxxyH[0] += 1
                     sendingCom(cog, com, calledFoxxy)
 
                     embed = discord.Embed(colour=colorEmbed, title="Seriosly, what does the fox say?? :fox:") #sending the message
@@ -92,9 +98,10 @@ class images(commands.Cog):
                 async with cs.get("https://random-d.uk/api/random") as r:
                     data = await r.json()
 
-                    global calledDuccy
+                    global calledDuccy, calledDuccyH
                     calledDuccy += 1
                     com = "duccy"
+                    calledDuccyH[0] += 1
                     sendingCom(cog, com, calledDuccy)
 
                     embed = discord.Embed(colour=colorEmbed, title="Quickidi quackidi your love is now my property!") #sending the message
@@ -103,6 +110,22 @@ class images(commands.Cog):
 
                     await ctx.send(embed=embed)
 
+    @tasks.loop(minutes=1)
+    async def exporterH():
+        global calledKittyH, calledDoggoH, calledFoxxyH, calledDuccyH
+        send = [calledKittyH, calledDoggoH, calledFoxxyH, calledDuccyH]
+        i = 0
+
+        while i < len(send): #looping throught send array
+            sendingH(send[i])
+            i = i + 1
+
+        calledKittyH[0] = 0 #reseting all values 
+        calledDoggoH[0] = 0
+        calledFoxxyH[0] = 0
+        calledDuccyH[0] = 0
+        
+    exporterH.start()
 
 def setup(bot):
     bot.add_cog(images(bot))
