@@ -30,7 +30,6 @@ def sendingCom(cog, command, n):
         write_api.write(bucket, org, data)
 
         client.close()
-        print("client closed and request send")
 
 def sendingH(array):
     with InfluxDBClient(url=url, token=token, org=org) as client:
@@ -50,6 +49,4 @@ def sendingH(array):
         }
 
         write_api.write(bucket, org, data)
-
         client.close()
-        print("client closed and request send")
