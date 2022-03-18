@@ -38,7 +38,7 @@ def sendingH(array):
 
         #data = "commands,command={} numCalled={} ".format(command, n)
         data = {
-            "measurement": "commandsH",
+            "measurement": "commands",
             "tags": {
                 "cog": array[2],
                 "command": array[1]

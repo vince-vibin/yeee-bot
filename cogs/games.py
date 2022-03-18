@@ -1,4 +1,4 @@
-from discord.ext import commands
+from discord.ext import commands, tasks
 
 import discord
 
@@ -15,6 +15,24 @@ hangman_games = {}
 # setting global var for Embed-Color
 global colorEmbed 
 colorEmbed = 0xFFFB00
+
+#vars for calling sending func
+from influx.influxdb import sendingCom, sendingH
+global cog
+
+cog = "games"
+calledRPS = 0
+calledHangman = 0
+calledRoll = 0
+calledDice = 0
+calledCoinflip = 0
+
+calledRPSH = [0, "rps", cog] 
+calledHangmanH = [0, "hangman", cog]
+calledRollH = [0, "roll", cog]
+calledDiceH = [0, "dice", cog]
+calledCoinflipH = [0, "coinflip", cog]
+
 
 class Games(commands.Cog):
     def __init__(self, bot):
@@ -44,16 +62,21 @@ class Games(commands.Cog):
 
             if won is None: # sending if choices are the same
                 colour=colorEmbed
-                titel="Oof"
                 message="Thats a close one, cunt!"
             elif won is True: # bot has won
                 colour=colorEmbed
-                titel="Hahahaha"
                 message="Your sutch a Noob go cry to your momma"
             elif won is False: # bot has lost
                 colour=colorEmbed
-                titel="F A C K"
                 message="I am defeated. Now I'm going to cry over there"
+
+            #sending calledNUM Metric to influxdb.py
+            global calledRPS, calledRPSH
+            com = "rps"
+            calledRPS += 1
+            calledRPSH[0] += 1
+
+            sendingCom(cog, com, calledRPS)
 
             embed = discord.Embed(colour=colour)
             embed.add_field(name=bot_choice, value=message, inline=False)
@@ -65,6 +88,14 @@ class Games(commands.Cog):
         player_id = ctx.author.id
         hangman_instance = HangmanGame()
         game_over, won = hangman_instance.run(player_id, guess)
+
+        #sending calledNUM Metric to influxdb.py
+        global calledHangman, calledHangmanH
+        com = "hangman"
+        calledHangman += 1
+        calledHangmanH[0] += 1
+
+        sendingCom(cog, com, calledHangman)
 
         if game_over:
             titel="Hahahahahahah, you fucking lost"
@@ -90,6 +121,15 @@ class Games(commands.Cog):
     
     @commands.command(description="Get a random number from 1-100. But Whuay??",brief="Get a random number from 1-100. But Whuay??")
     async def roll(self, ctx, range: int, bet: int):
+
+        #sending calledNUM Metric to influxdb.py
+        global calledRoll, calledRollH
+        com = "roll"
+        calledRoll += 1
+        calledRollH[0] += 1
+
+        sendingCom(cog, com, calledRoll)
+
         if range > 1:
             if bet < range: 
                 n = random.randrange(1, range)
@@ -123,6 +163,15 @@ class Games(commands.Cog):
     @commands.command(description="Roll a dice cause you dont have any hobbys.",brief="Roll a dice cause you dont have any hobbys.")
     async def dice(self, ctx, bet: int):
         n = random.randrange(1, 6)
+
+        #sending calledNUM Metric to influxdb.py
+        global calledDice, calledDiceH
+        com = "dice"
+        calledDice += 1
+        calledDiceH[0] += 1
+
+        sendingCom(cog, com, calledDice)
+
         if bet != None:
             if bet > 6:
                 embed = discord.Embed(colour=colorEmbed)
@@ -152,6 +201,15 @@ class Games(commands.Cog):
 
     @commands.command(aliases=['coin'], description="Just flip a coin (i dont know whuay you would).",brief="Just flip a coin (i dont know whuay you would).")
     async def coinflip(self, ctx, bet):
+
+        #sending calledNUM Metric to influxdb.py
+        global calledCoinflip, calledCoinflipH
+        com = "coinflip"
+        calledCoinflip += 1
+        calledCoinflipH[0] += 1
+
+        sendingCom(cog, com, calledCoinflip)
+
         if bet.lower() == "heads" or bet.lower() == "tails":
             side = random.choice(('heads', 'tails'))
             
@@ -171,5 +229,24 @@ class Games(commands.Cog):
             embed.set_footer(text="Try again")
             await ctx.send(embed=embed)
     
+    @tasks.loop(minutes=1)
+    async def exporterH():
+        global calledRPSH, calledHangmanH, calledRollH, calledDiceH, calledCoinflipH
+        send = [calledRPSH, calledHangmanH, calledRollH, calledDiceH, calledCoinflipH]
+        i = 0
+
+        while i < len(send): #looping throught send array
+            sendingH(send[i])
+            i = i + 1
+
+        calledRPSH[0] = 0 #reseting all values 
+        calledHangmanH[0] = 0
+        calledRollH[0] = 0
+        calledDiceH[0] = 0
+        calledCoinflipH[0] = 0
+        
+    exporterH.start()
+
+
 def setup(bot):
     bot.add_cog(Games(bot))

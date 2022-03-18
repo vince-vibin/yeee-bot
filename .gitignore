@@ -2,3 +2,4 @@
 /settings_files/_global.py
 __pycache__/
 secrets.py
+.vscode
