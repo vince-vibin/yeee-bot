@@ -48,3 +48,21 @@ def sendingH(array):
 
         write_api.write(bucket, org, data)
         client.close()
+
+def sendingServers(serversNum):
+    with InfluxDBClient(url=url, token=token, org=org) as client:
+        write_api = client.write_api(write_options=SYNCHRONOUS)
+            
+
+        data = {
+            "measurement": "servers",
+            "tags": {
+                "onServers": "onServersNum",
+            } ,
+            "fields": {
+                "serversNum": serversNum,
+            }
+        }
+
+        write_api.write(bucket, org, data)
+        client.close()
