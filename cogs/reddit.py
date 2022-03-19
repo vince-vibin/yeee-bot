@@ -9,7 +9,7 @@ global colorEmbed
 colorEmbed = 0xFF6800
 
 #vars for calling sending func
-from influx.influxdb import sendingCom, sendingH
+from influxdbExport import sendingCom, sendingH
 global cog
 
 cog = "reddit"

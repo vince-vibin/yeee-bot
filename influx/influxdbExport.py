@@ -15,7 +15,6 @@ def sendingCom(cog, command, n):
         write_api = client.write_api(write_options=SYNCHRONOUS)
             
 
-        #data = "commands,command={} numCalled={} ".format(command, n)
         data = {
             "measurement": "commands",
             "tags": {
@@ -36,7 +35,6 @@ def sendingH(array):
         write_api = client.write_api(write_options=SYNCHRONOUS)
             
 
-        #data = "commands,command={} numCalled={} ".format(command, n)
         data = {
             "measurement": "commands",
             "tags": {

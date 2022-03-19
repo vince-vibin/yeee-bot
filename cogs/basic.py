@@ -1,7 +1,7 @@
 from discord.ext import commands, tasks
 import discord
 
-from influx.influxdb import sendingCom, sendingH
+from influxdbExport import sendingCom, sendingH
 
 
 # setting global var for Embed-Color

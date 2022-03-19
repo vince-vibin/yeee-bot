@@ -2,7 +2,7 @@ from discord.ext import commands, tasks
 import discord
 
 #vars for calling sending func
-from influx.influxdb import sendingCom, sendingH
+from influxdbExport import sendingCom, sendingH
 global cog
 
 cog = "help"
