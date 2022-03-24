@@ -1,6 +1,7 @@
 from influxdb_client import InfluxDBClient
 from influxdb_client.client.write_api import SYNCHRONOUS
 
+import datetime
 
 from .influxSecrets import influxDB; # importing vars for InfluxDBClient
 
@@ -13,7 +14,6 @@ org = influxDB[3]
 def sendingCom(cog, command, n):
     with InfluxDBClient(url=url, token=token, org=org) as client:
         write_api = client.write_api(write_options=SYNCHRONOUS)
-            
 
         data = {
             "measurement": "commands",
@@ -33,7 +33,6 @@ def sendingCom(cog, command, n):
 def sendingH(array):
     with InfluxDBClient(url=url, token=token, org=org) as client:
         write_api = client.write_api(write_options=SYNCHRONOUS)
-            
 
         data = {
             "measurement": "commands",
@@ -43,6 +42,41 @@ def sendingH(array):
             } ,
             "fields": {
                 "numCalledH": array[0]
+            }
+        }
+
+        write_api.write(bucket, org, data)
+        client.close()
+
+def sendingServers(serversNum):
+    with InfluxDBClient(url=url, token=token, org=org) as client:
+        write_api = client.write_api(write_options=SYNCHRONOUS)
+        time = datetime.datetime.now()
+
+        data = {
+            "measurement": "servers",
+            "tags": {
+                "onServers": "onServersNum",
+            },
+            "fields": {
+                "serversNum": serversNum,
+            }
+        }
+        write_api.write(bucket, org, data)
+        client.close()
+
+def sendingSYS(array):
+    with InfluxDBClient(url=url, token=token, org=org) as client:
+        write_api = client.write_api(write_options=SYNCHRONOUS)
+        time = datetime.datetime.now()
+
+        data = {
+            "measurement": "system",
+            "tags": {
+                "spec": array[2],
+            } ,
+            "fields": {
+                array[1]: array[0],
             }
         }
 

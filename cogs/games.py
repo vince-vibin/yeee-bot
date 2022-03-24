@@ -17,7 +17,7 @@ global colorEmbed
 colorEmbed = 0xFFFB00
 
 #vars for calling sending func
-from influxdbExport import sendingCom, sendingH
+from influx.influxdbExport import sendingCom, sendingH
 global cog
 
 cog = "games"
@@ -120,7 +120,7 @@ class Games(commands.Cog):
             await ctx.send(embed=embed)
     
     @commands.command(description="Get a random number from 1-100. But Whuay??",brief="Get a random number from 1-100. But Whuay??")
-    async def roll(self, ctx, range: int, bet: int):
+    async def roll(self, ctx, range: int, bet: int = None):
 
         #sending calledNUM Metric to influxdb.py
         global calledRoll, calledRollH
@@ -131,28 +131,36 @@ class Games(commands.Cog):
         sendingCom(cog, com, calledRoll)
 
         if range > 1:
-            if bet < range: 
-                n = random.randrange(1, range)
-                if bet == n: 
+            n = random.randrange(1, range)
+            if bet != None:
+                if bet < range: 
+                    if bet == n: 
+                        embed = discord.Embed(colour=colorEmbed)
+                        embed.add_field(name="You got: ", value=n, inline=True)
+                        embed.add_field(name="From a range between 1 and : ", value=range, inline=True)
+                        embed.add_field(name="Your bet was: ", value=bet, inline=True)
+                        embed.add_field(name="Conclusion: ", value="You fucking did it you finally achieved something in your life", inline=False)
+                        embed.set_footer(text="Now move on with your live and get hobbys.")
+                        await ctx.send(embed=embed)
+                    else: 
+                        embed = discord.Embed(colour=colorEmbed)
+                        embed.add_field(name="You got: ", value=n, inline=True)
+                        embed.add_field(name="From a range from 1 to: ", value=range, inline=True)
+                        embed.add_field(name="Your bet was: ", value=bet, inline=True)
+                        embed.add_field(name="Conclusion: ", value="You're a loser. And will have gambeling issues in your life", inline=False)
+                        embed.set_footer(text="Now move on with your live and get hobbys.")
+                        await ctx.send(embed=embed)
+                else:
                     embed = discord.Embed(colour=colorEmbed)
-                    embed.add_field(name="You got: ", value=n, inline=True)
-                    embed.add_field(name="From a range between 1 and : ", value=range, inline=True)
-                    embed.add_field(name="Your bet was: ", value=bet, inline=True)
-                    embed.add_field(name="Conclusion: ", value="You fucking did it you finally achieved something in your life", inline=False)
-                    embed.set_footer(text="Now move on with your live and get hobbys.")
-                    await ctx.send(embed=embed)
-                else: 
-                    embed = discord.Embed(colour=colorEmbed)
-                    embed.add_field(name="You got: ", value=n, inline=True)
-                    embed.add_field(name="From a range from 1 to: ", value=range, inline=True)
-                    embed.add_field(name="Your bet was: ", value=bet, inline=True)
-                    embed.add_field(name="Conclusion: ", value="You're a loser. And will have gambeling issues in your life", inline=False)
-                    embed.set_footer(text="Now move on with your live and get hobbys.")
+                    embed.add_field(name="Idiot", value="Your bet cant be higher then your range. OBVIOSLY ", inline=False)
+                    embed.set_footer(text="Try again")
                     await ctx.send(embed=embed)
             else:
                 embed = discord.Embed(colour=colorEmbed)
-                embed.add_field(name="Idiot", value="Your bet cant be higher then your range. OBVIOSLY ", inline=False)
-                embed.set_footer(text="Try again")
+                embed.add_field(name="You got: ", value=n, inline=True)
+                embed.add_field(name="From a range from 1 to: ", value=range, inline=True)
+                embed.add_field(name="Conclusion: ", value="I dont care", inline=False)
+                embed.set_footer(text="Now move on with your live and get hobbys.")
                 await ctx.send(embed=embed)
         else:
             embed = discord.Embed(colour=colorEmbed)
@@ -161,7 +169,7 @@ class Games(commands.Cog):
             await ctx.send(embed=embed)
 
     @commands.command(description="Roll a dice cause you dont have any hobbys.",brief="Roll a dice cause you dont have any hobbys.")
-    async def dice(self, ctx, bet: int):
+    async def dice(self, ctx, bet: int = None):
         n = random.randrange(1, 6)
 
         #sending calledNUM Metric to influxdb.py
@@ -200,7 +208,7 @@ class Games(commands.Cog):
             await ctx.send(embed=embed)
 
     @commands.command(aliases=['coin'], description="Just flip a coin (i dont know whuay you would).",brief="Just flip a coin (i dont know whuay you would).")
-    async def coinflip(self, ctx, bet):
+    async def coinflip(self, ctx, bet=None):
 
         #sending calledNUM Metric to influxdb.py
         global calledCoinflip, calledCoinflipH
@@ -209,25 +217,30 @@ class Games(commands.Cog):
         calledCoinflipH[0] += 1
 
         sendingCom(cog, com, calledCoinflip)
+        side = random.choice(('heads', 'tails'))
 
-        if bet.lower() == "heads" or bet.lower() == "tails":
-            side = random.choice(('heads', 'tails'))
-            
-            if side == bet:
-                embed = discord.Embed(colour=colorEmbed)
-                embed.add_field(name=side, value="You fucking did it you finally achieved something in your life", inline=False)
-                embed.set_footer(text="Now move on with your live and get hobbys.")
-                await ctx.send(embed=embed)
+        if bet == None:
+            embed = discord.Embed(colour=colorEmbed)
+            embed.add_field(name="You flipped: " + side, value="I really dont care why tho", inline=False)
+            embed.set_footer(text="Now move on with your live and get hobbys.")
+            await ctx.send(embed=embed)
+        else:
+            if bet.lower() == "heads" or bet.lower() == "tails":
+                if side == bet:
+                    embed = discord.Embed(colour=colorEmbed)
+                    embed.add_field(name="You flipped: " + side, value="You fucking did it you finally achieved something in your life", inline=False)
+                    embed.set_footer(text="Now move on with your live and get hobbys.")
+                    await ctx.send(embed=embed)
+                else:
+                    embed = discord.Embed(colour=colorEmbed)
+                    embed.add_field(name="You flipped: " + side, value="You're a loser. And will have gambeling issues in your life", inline=False)
+                    embed.set_footer(text="Now move on with your live and get hobbys.")
+                    await ctx.send(embed=embed)
             else:
                 embed = discord.Embed(colour=colorEmbed)
-                embed.add_field(name="You flipped: " + side, value="You're a loser. And will have gambeling issues in your life", inline=False)
-                embed.set_footer(text="Now move on with your live and get hobbys.")
+                embed.add_field(name="Idiot", value="You have to bet on heads or tails", inline=False)
+                embed.set_footer(text="Try again")
                 await ctx.send(embed=embed)
-        else:
-            embed = discord.Embed(colour=colorEmbed)
-            embed.add_field(name="Idiot", value="You have to bet on heads or tails", inline=False)
-            embed.set_footer(text="Try again")
-            await ctx.send(embed=embed)
     
     @tasks.loop(minutes=1)
     async def exporterH():
