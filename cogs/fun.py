@@ -52,20 +52,21 @@ class fun(commands.Cog):
             embed.add_field(name="To make you fell better", value=yoomum, inline=False)
             await ctx.send(embed=embed)
     
-    @commands.command(aliases=['wisdom'], brief="Smort") # getting a random wisdom from data/weisheiten.json
-    async def smort(self, ctx,):
+    @commands.command(aliases=['wisdom', "smort", "west"], brief="get a random Kanye West quote") # getting a random wisdom from data/weisheiten.json
+    async def kanye(self, ctx,):
         wisdom = await get_wisdom()
 
         #sending calledNUM Metric to influxdb.py
         global calledSmort, calledSmortH
-        com = "smorts"
+        com = "kanye"
         calledSmort += 1
         calledSmortH[0] += 1
 
         sendingCom(cog, com, calledSmort)
 
         embed = discord.Embed(colour=colorEmbed)
-        embed.add_field(name=wisdom, value="This wisdom i learned from my dad/developer YeeeeeBoi", inline=False)
+        embed.add_field(name=wisdom, value="This is a random quote by Kanye West", inline=False)
+        embed.set_footer(text="Check out the Kanye Rest API here: https://github.com/ajzbc/kanye.rest")
         await ctx.send(embed=embed)
 
     @commands.command(aliases=['ball', 'mb', '8ball'], brief="Magic 8Ball") # getting a random answer from data/8ball.json

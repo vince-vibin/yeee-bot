@@ -51,7 +51,6 @@ def sendingH(array):
 def sendingServers(serversNum):
     with InfluxDBClient(url=url, token=token, org=org) as client:
         write_api = client.write_api(write_options=SYNCHRONOUS)
-        time = datetime.datetime.now()
 
         data = {
             "measurement": "servers",
@@ -68,7 +67,6 @@ def sendingServers(serversNum):
 def sendingSYS(array):
     with InfluxDBClient(url=url, token=token, org=org) as client:
         write_api = client.write_api(write_options=SYNCHRONOUS)
-        time = datetime.datetime.now()
 
         data = {
             "measurement": "system",
@@ -80,5 +78,21 @@ def sendingSYS(array):
             }
         }
 
+        write_api.write(bucket, org, data)
+        client.close()
+
+def sendingErrors(array):
+    with InfluxDBClient(url=url, token=token, org=org) as client:
+        write_api = client.write_api(write_options=SYNCHRONOUS)
+
+        data = {
+            "measurement": "ERRORS",
+            "tags": {
+                "type": array[0],
+            },
+            "fields": {
+                "errorsNum": array[1],
+            }
+        }
         write_api.write(bucket, org, data)
         client.close()

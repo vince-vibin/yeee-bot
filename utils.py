@@ -3,9 +3,6 @@ import os
 from settings import *
 import random
 from discord.ext import commands
-import queue
-import qrcode
-import image
 
 async def get_yoomum_joke():
     with open(os.path.join(DATA_DIR, "yoomum.json"), encoding='utf-8') as yoomum_file:
@@ -15,10 +12,9 @@ async def get_yoomum_joke():
     return yoomum
 
 async def get_wisdom():
-    with open(os.path.join(DATA_DIR, "weisheiten.json"), encoding='utf-8') as wisdom_file:
+    with open(os.path.join(DATA_DIR, "kanyerest.json"), encoding='utf-8') as wisdom_file:
         wisdom = json.load(wisdom_file)
-    random_category = random.choice(list(wisdom.keys()))
-    wisdom = random.choice(list(wisdom[random_category]))
+    wisdom = random.choice(list(wisdom))
     return wisdom
 
 async def get_answers():
