@@ -11,6 +11,7 @@ class InfluxMetrix(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.exportServer.start()
+        self.getSysData.start()
 
     @tasks.loop(minutes=1)
     async def exportServer(self):
@@ -19,22 +20,29 @@ class InfluxMetrix(commands.Cog):
         sendingServers(serversNum)
 
     @tasks.loop(minutes=1)
-    async def getSysData():
+    async def getSysData(self):
         ram = psutil.virtual_memory()
         disk = psutil.disk_usage("/")
         i = 0
+        send = []
 
         cpuPerc = [psutil.cpu_percent(), "cpuUsed%", "cpu"]
         ramUsed = [ram.percent, "ramUsed%", "ram"]
         diskUsedPerc = [disk.percent, "diskUsed%", "disk"]
-        
+
         send = [cpuPerc, ramUsed, diskUsedPerc]
 
+        try: 
+            latency = [round(self.bot.latency * 1000), "latency", "network"]
+            send.append(latency)
+        except:
+            print("Failed to retrieve Latency")
+        
         while i < len(send): #looping throught send array
             sendingSYS(send[i])
             i = i + 1
 
-    getSysData.start()
+        
 
 
 def setup(bot):
