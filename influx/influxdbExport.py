@@ -1,15 +1,15 @@
+import os
+
 from influxdb_client import InfluxDBClient
 from influxdb_client.client.write_api import SYNCHRONOUS
 
-import datetime
-
-from .influxSecrets import influxDB; # importing vars for InfluxDBClient
+#from .influxSecrets import influxDB; # importing vars for InfluxDBClient
 
 #defining var's for InfluxDBClient from secrets.py
-url = influxDB[0]
-token = influxDB[1]
-bucket = influxDB[2]
-org = influxDB[3]
+url = os.getenv("INFLUX_url")
+token = os.getenv("INFLUX_token")
+bucket = os.getenv("INFLUX_bucket")
+org = os.getenv("INFLUX_org")
 
 def sendingCom(cog, command, n):
     with InfluxDBClient(url=url, token=token, org=org) as client:
