@@ -42,15 +42,19 @@ class fun(commands.Cog):
         with open("data\yoomum.json", encoding='utf-8') as yoomum_file:
             yoomum = json.load(yoomum_file)
             random_category = random.choice(list(yoomum.keys()))
+            print(random_category)
             yoomum = random.choice(list(yoomum[random_category]))
 
         if member is not None:
+            author = ctx.author
             embed = discord.Embed(colour=colorEmbed)
-            embed.add_field(name=member.mention, value=yoomum, inline=False)
+            embed.add_field(name=yoomum, value="{} got owned by {}".format(member.mention, author.mention), inline=False)
             await ctx.send(embed=embed)
         else:
+            author = ctx.author
             embed = discord.Embed(colour=colorEmbed)
-            embed.add_field(name="To make you fell better", value=yoomum, inline=False)
+            embed.add_field(name=yoomum, value="{} got owned by himself".format(author.mention), inline=False)
+            embed.set_footer(text="what a loser")
             await ctx.send(embed=embed)
     
     @commands.command(aliases=['wisdom', "smort", "west"], brief="get a random Kanye West quote") # getting a random wisdom from data/weisheiten.json
