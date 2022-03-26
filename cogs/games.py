@@ -1,5 +1,5 @@
 from discord.ext import commands, tasks
-
+from discord_slash import cog_ext, SlashContext
 import discord
 
 from rps.converter import RockPaperScissorsConverter
@@ -38,8 +38,8 @@ class Games(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(description="Play Rock, Paper, Scissors against your friend replacement.",brief="Play Rock, Paper, Scissors against your friend replacement.") # Rock, Paper, Scissors game
-    async def rps(self, ctx, user_choice:RockPaperScissorsConverter): # used controller.py and model.py in rps/
+    @cog_ext.cog_slash(name="rps", description="Play Rock, Paper, Scissors against your friend replacement.") # Rock, Paper, Scissors game
+    async def rps(self, ctx: SlashContext, user_choice:RockPaperScissorsConverter): # used controller.py and model.py in rps/
         rps_m = RPS()
         bot_choice = random.choice(rps_m.get_choices()) # getting random choice form rps/model.py closs RPS
         user_choice = user_choice.choice
@@ -83,8 +83,8 @@ class Games(commands.Cog):
             await ctx.send(embed=embed)
 
 
-    @commands.command(aliases=['hm'], description="Play Hangman against your friend replacement.", brief="Play Hangman against your friend replacement.") # the hangman game
-    async def hangman(self, ctx, guess: str): # used controller.py and model.py in hangman/ 
+    @cog_ext.cog_slash(name="hm", description="Play Hangman against your friend replacement.") # the hangman game
+    async def hangman(self, ctx: SlashContext, guess: str): # used controller.py and model.py in hangman/ 
         player_id = ctx.author.id
         hangman_instance = HangmanGame()
         game_over, won = hangman_instance.run(player_id, guess)
@@ -119,8 +119,8 @@ class Games(commands.Cog):
             embed.add_field(name="Guesses so far:", value=hangman_instance.get_guess_string(), inline=False)
             await ctx.send(embed=embed)
     
-    @commands.command(description="Get a random number from 1-100. But Whuay??",brief="Get a random number from 1-100. But Whuay??")
-    async def roll(self, ctx, range: int, bet: int = None):
+    @cog_ext.cog_slash(name="roll", description="Get a random number from 1 to anything you like. But Whuay??")
+    async def roll(self, ctx: SlashContext, range: int, bet: int = None):
 
         #sending calledNUM Metric to influxdb.py
         global calledRoll, calledRollH
@@ -168,8 +168,8 @@ class Games(commands.Cog):
             embed.set_footer(text="Try again")
             await ctx.send(embed=embed)
 
-    @commands.command(description="Roll a dice cause you dont have any hobbys.",brief="Roll a dice cause you dont have any hobbys.")
-    async def dice(self, ctx, bet: int = None):
+    @cog_ext.cog_slash(name="dice", description="Roll a dice cause you dont have any hobbys.")
+    async def dice(self, ctx: SlashContext, bet: int = None):
         n = random.randrange(1, 6)
 
         #sending calledNUM Metric to influxdb.py
@@ -207,8 +207,8 @@ class Games(commands.Cog):
             embed.set_footer(text="Now move on with your live and get hobbys.")
             await ctx.send(embed=embed)
 
-    @commands.command(aliases=['coin'], description="Just flip a coin (i dont know whuay you would).",brief="Just flip a coin (i dont know whuay you would).")
-    async def coinflip(self, ctx, bet=None):
+    @cog_ext.cog_slash(name="coin", description="Just flip a coin (i dont know whuay you would).")
+    async def coinflip(self, ctx: SlashContext, bet=None):
 
         #sending calledNUM Metric to influxdb.py
         global calledCoinflip, calledCoinflipH

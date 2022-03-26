@@ -1,10 +1,13 @@
 from wsgiref.simple_server import sys_version
-from discord.ext import commands
+from discord.ext.commands import Bot
 import os
 import discord
+from discord import Intents
 from dotenv import load_dotenv
+from discord_slash import SlashCommand
 
-bot = commands.Bot(command_prefix="$")
+bot = Bot(command_prefix="$", intents=Intents.default())
+slash = SlashCommand(bot, sync_commands=True)
 bot.remove_command("help")
 
 load_dotenv()

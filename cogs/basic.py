@@ -1,5 +1,6 @@
 from discord.ext import commands, tasks
 import discord
+from discord_slash import cog_ext, SlashContext
 
 from influx.influxdbExport import sendingCom, sendingH, sendingErrors
 
@@ -41,11 +42,12 @@ class Basic(commands.Cog):
 
         embed = discord.Embed(colour=colour)
         embed.add_field(name="Bruh", value="It seems like you are to dumb to use this command so please leave me alone.", inline=False)
+        embed.set_footer(text=ex)
         await ctx.send(embed=embed)
 
 
-    @commands.command(description="*Happy Table-Tennis noises*",brief="*Happy Table-Tennis noises*") # getting the ping of the bot
-    async def ping(self, ctx):
+    @cog_ext.cog_slash(name="ping", description="*Happy Table-Tennis noises*") # getting the ping of the bot
+    async def ping(self, ctx: SlashContext):
         com = "ping"
         #sending calledNUM Metric to influxdb.py
         global calledPing, calledPingH
@@ -55,13 +57,14 @@ class Basic(commands.Cog):
         calledPingH[0] += 1
 
         sendingCom(cog, com, calledPing)
+        ping = format(round(self.bot.latency * 1000))
 
         embed = discord.Embed(colour=colorEmbed)
-        embed.add_field(name="Pong you Dumb!", value=format(round(self.bot.latency * 1000)), inline=False)
+        embed.add_field(name="Pong you Dumb!", value="{} ms".format(ping), inline=False)
         await ctx.send(embed=embed)
 
-    @commands.command(description="Get info about the life of YeeeeeBot",brief="Get info about the life of YeeeeeBot") # get info about the bot
-    async def botinfo(self, ctx):
+    @cog_ext.cog_slash(name="botinfo", description="Get info about the life of YeeeeeBot") # get info about the bot
+    async def botinfo(self, ctx: SlashContext):
         com = "botinfo"
         
         #sending calledNUM Metric to influxdb.py
@@ -78,8 +81,8 @@ class Basic(commands.Cog):
         embed.add_field(name="Developer/Dad :desktop:", value="YeeeeeBoi", inline=True)
         await ctx.send(embed=embed)
 
-    @commands.command(description="Get server status",brief="Get server status") # get info about the server
-    async def serverinfo(self, ctx):
+    @cog_ext.cog_slash(name="serverinfo", description="get information about the Server") # get info about the server
+    async def serverinfo(self, ctx: SlashContext):
         com = "serverinfo"
 
         #sending calledNUM Metric to influxdb.py

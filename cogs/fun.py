@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands, tasks
 import random
 import json
+from discord_slash import cog_ext, SlashContext
 
 import qrcode
 import os
@@ -29,8 +30,8 @@ class fun(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(brief="Yoo Mum is!") # getting a random yoomum joke from data/yoomum.json
-    async def yoomum(self, ctx, member: discord.Member = None):
+    @cog_ext.cog_slash(name="yoomum", description="be nice to moms") # getting a random yoomum joke from data/yoomum.json
+    async def yoomum(self, ctx: SlashContext, member: discord.Member = None):
         #sending calledNUM Metric to influxdb.py
         global calledYoomum, calledYoomumH
         com = "yoomum"
@@ -57,8 +58,8 @@ class fun(commands.Cog):
             embed.set_footer(text="what a loser")
             await ctx.send(embed=embed)
     
-    @commands.command(aliases=['wisdom', "smort", "west"], brief="get a random Kanye West quote") # getting a random wisdom from data/weisheiten.json
-    async def kanye(self, ctx,):
+    @cog_ext.cog_slash(name="kanye", description="get a random Kanye West quote") # getting a random wisdom from data/weisheiten.json
+    async def kanye(self, ctx: SlashContext):
         with open("data\kanyerest.json", encoding='utf-8') as wisdom_file:
             wisdom = json.load(wisdom_file)
             wisdom = random.choice(list(wisdom))
@@ -76,8 +77,8 @@ class fun(commands.Cog):
         embed.set_footer(text="Check out the Kanye Rest API here: https://github.com/ajzbc/kanye.rest")
         await ctx.send(embed=embed)
 
-    @commands.command(aliases=['ball', 'mb', '8ball'], brief="Magic 8Ball") # getting a random answer from data/8ball.json
-    async def magicball(self, ctx, *question):
+    @cog_ext.cog_slash(name="8ball", description="Ask the magic 8ball a question") # getting a random answer from data/8ball.json
+    async def magicball(self, ctx: SlashContext, question):
 
         #sending calledNUM Metric to influxdb.py
         global calledMagicball, calledMagicballH
@@ -97,8 +98,8 @@ class fun(commands.Cog):
         embed.set_footer(text="Just like my balls if you know what i mean")
         await ctx.send(embed=embed)
     
-    @commands.command(aliases=['qr'], brief="Create a qrcode") #generating a qr code based on the profided link=data
-    async def qrcode(self, ctx, *link):
+    @cog_ext.cog_slash(name="qr", description="Create a qrcode to a link") #generating a qr code based on the profided link=data
+    async def qrcode(self, ctx: SlashContext, link):
         qr = qrcode.QRCode(version=1, box_size=10, border=5)
         data = link
 
