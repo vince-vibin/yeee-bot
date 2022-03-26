@@ -1,9 +1,7 @@
 import discord
 from discord.ext import commands, tasks
-
-from utils import get_yoomum_joke
-from utils import get_wisdom
-from utils import get_answers
+import random
+import json
 
 import qrcode
 import os
@@ -33,8 +31,6 @@ class fun(commands.Cog):
 
     @commands.command(brief="Yoo Mum is!") # getting a random yoomum joke from data/yoomum.json
     async def yoomum(self, ctx, member: discord.Member = None):
-        yoomum = await get_yoomum_joke()
-
         #sending calledNUM Metric to influxdb.py
         global calledYoomum, calledYoomumH
         com = "yoomum"
@@ -43,34 +39,45 @@ class fun(commands.Cog):
 
         sendingCom(cog, com, calledYoomum)
 
+        with open("data\yoomum.json", encoding='utf-8') as yoomum_file:
+            yoomum = json.load(yoomum_file)
+            random_category = random.choice(list(yoomum.keys()))
+            print(random_category)
+            yoomum = random.choice(list(yoomum[random_category]))
+
         if member is not None:
+            author = ctx.author
             embed = discord.Embed(colour=colorEmbed)
-            embed.add_field(name=member.name, value=yoomum, inline=False)
+            embed.add_field(name=yoomum, value="{} got owned by {}".format(member.mention, author.mention), inline=False)
             await ctx.send(embed=embed)
         else:
+            author = ctx.author
             embed = discord.Embed(colour=colorEmbed)
-            embed.add_field(name="To make you fell better", value=yoomum, inline=False)
+            embed.add_field(name=yoomum, value="{} got owned by himself".format(author.mention), inline=False)
+            embed.set_footer(text="what a loser")
             await ctx.send(embed=embed)
     
-    @commands.command(aliases=['wisdom'], brief="Smort") # getting a random wisdom from data/weisheiten.json
-    async def smort(self, ctx,):
-        wisdom = await get_wisdom()
+    @commands.command(aliases=['wisdom', "smort", "west"], brief="get a random Kanye West quote") # getting a random wisdom from data/weisheiten.json
+    async def kanye(self, ctx,):
+        with open("data\kanyerest.json", encoding='utf-8') as wisdom_file:
+            wisdom = json.load(wisdom_file)
+            wisdom = random.choice(list(wisdom))
 
         #sending calledNUM Metric to influxdb.py
         global calledSmort, calledSmortH
-        com = "smorts"
+        com = "kanye"
         calledSmort += 1
         calledSmortH[0] += 1
 
         sendingCom(cog, com, calledSmort)
 
         embed = discord.Embed(colour=colorEmbed)
-        embed.add_field(name=wisdom, value="This wisdom i learned from my dad/developer YeeeeeBoi", inline=False)
+        embed.add_field(name=wisdom, value="This is a random quote by Kanye West", inline=False)
+        embed.set_footer(text="Check out the Kanye Rest API here: https://github.com/ajzbc/kanye.rest")
         await ctx.send(embed=embed)
 
     @commands.command(aliases=['ball', 'mb', '8ball'], brief="Magic 8Ball") # getting a random answer from data/8ball.json
     async def magicball(self, ctx, *question):
-        answers = await get_answers()
 
         #sending calledNUM Metric to influxdb.py
         global calledMagicball, calledMagicballH
@@ -79,7 +86,12 @@ class fun(commands.Cog):
         calledMagicballH[0] += 1
 
         sendingCom(cog, com, calledMagicball)
-        
+
+        with open("data\8ball.json", encoding='utf-8') as answers_file:
+            answers = json.load(answers_file)
+            random_category = random.choice(list(answers.keys()))
+            answers = random.choice(list(answers[random_category]))
+
         embed = discord.Embed(colour=colorEmbed)
         embed.add_field(name=answers, value="The ball has spoken", inline=False)
         embed.set_footer(text="Just like my balls if you know what i mean")

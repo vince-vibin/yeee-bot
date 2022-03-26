@@ -1,7 +1,7 @@
 from discord.ext import commands, tasks
 import discord
 
-from influx.influxdbExport import sendingCom, sendingH
+from influx.influxdbExport import sendingCom, sendingH, sendingErrors
 
 
 # setting global var for Embed-Color
@@ -15,6 +15,7 @@ cog = "basic"
 calledPing = 0
 calledBotinfo = 0
 calledServerinfo = 0
+threwError = 0
 
 calledPingH = [0, "ping", cog] 
 calledBotinfoH = [0, "serverinfo", cog]
@@ -30,6 +31,13 @@ class Basic(commands.Cog):
     async def on_command_error(self, ctx, ex):
         print(ex)
         colour=0xFF0000 # color for the error message
+
+        global threwError
+        threwError += 1
+
+        send = ["exHandler", threwError]
+
+        sendingErrors(send)
 
         embed = discord.Embed(colour=colour)
         embed.add_field(name="Bruh", value="It seems like you are to dumb to use this command so please leave me alone.", inline=False)
