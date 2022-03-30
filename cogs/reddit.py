@@ -3,6 +3,7 @@ from discord.ext import commands, tasks
 import discord
 import random
 import os
+from discord_slash import cog_ext, SlashContext
 
 # setting global var for Embed-Color
 global colorEmbed 
@@ -44,8 +45,8 @@ class Reddit(commands.Cog):
     reddit = asyncpraw.Reddit(client_id = clientID, client_secret = clientSecret, username = username, password = password, user_agent = userAgent)
 
 
-    @commands.command(description="Get a random piece of content from r/memes",brief="Get a random piece of content from r/memes")
-    async def meme(self, ctx):
+    @cog_ext.cog_slash(name="meme", description="Get a random piece of content from r/memes")
+    async def meme(self, ctx: SlashContext):
         async with ctx.channel.typing():
             global reddit
             subreddit = await reddit.subreddit("memes")
@@ -75,70 +76,8 @@ class Reddit(commands.Cog):
             await ctx.send(embed=embed)
         return
 
-    @commands.command(aliases=['think'], description="Get a random piece of content from r/mhh",brief="Get a random piece of content from r/mhh")
-    async def hmm(self, ctx):
-        async with ctx.channel.typing():
-            global reddit
-            subreddit = await reddit.subreddit("hmm")
-            hot = subreddit.hot(limit = 20)
-            all_subs = []
-
-            async for submission in hot:
-                all_subs.append(submission)
-
-            random_sub = random.choice(all_subs)
-            name = random_sub.title
-            url = random_sub.url
-
-            #sending calledNUM Metric to influxdb.py
-            global calledHmm, calledHmmH
-            com = "hmm"
-            calledHmm += 1
-            calledHmmH[0] += 1
-
-            sendingCom(cog, com, calledHmm)
-            
-            embed = discord.Embed(colour=colorEmbed)
-            embed.add_field(name=name, value="...", inline=False)
-            embed.set_image(url=url)
-            embed.set_footer(text="A random piece of content from r/hmm")
-
-            await ctx.send(embed=embed)
-        return
-
-    @commands.command(aliases=['depression'], description="Get a random piece of content from r/im14andthisisdeep",brief="Get a random piece of content from r/im14andthisisdeep")
-    async def deep(self, ctx):
-        async with ctx.channel.typing():
-            global reddit
-            subreddit = await reddit.subreddit("im14andthisisdeep")
-            hot = subreddit.hot(limit = 20)
-            all_subs = []
-
-            async for submission in hot:
-                all_subs.append(submission)
-
-            random_sub = random.choice(all_subs)
-            name = random_sub.title
-            url = random_sub.url
-            
-            #sending calledNUM Metric to influxdb.py
-            global calledDeep, calledDeepH
-            com = "deep"
-            calledDeep += 1
-            calledDeepH[0] += 1
-
-            sendingCom(cog, com, calledDeep)
-            
-            embed = discord.Embed(colour=colorEmbed)
-            embed.add_field(name=name, value="...", inline=False)
-            embed.set_image(url=url)
-            embed.set_footer(text="A random piece of content from r/im14andthisisdeep")
-
-            await ctx.send(embed=embed)
-        return
-
-    @commands.command(aliases=['wholesomememes'], description="Get a random piece of content from r/wholesomememes",brief="Get a random piece of content from r/wholesomememes")
-    async def wholesome(self, ctx):
+    @cog_ext.cog_slash(name="wholesome", description="Get a random piece of content from r/wholesomememes")
+    async def wholesome(self, ctx: SlashContext):
         async with ctx.channel.typing():
             global reddit
             subreddit = await reddit.subreddit("wholesomememes")
@@ -168,8 +107,8 @@ class Reddit(commands.Cog):
             await ctx.send(embed=embed)
         return
 
-    @commands.command(aliases=['stockphotos', 'wtfstockphotos'], description="Get a random piece of content from r/stockphotos",brief="Get a random piece of content from r/stockphotos")
-    async def stock(self, ctx):
+    @cog_ext.cog_slash(name="stock", description="Get a random piece of content from r/stockphotos")
+    async def stock(self, ctx: SlashContext):
         async with ctx.channel.typing():
             global reddit
             subreddit = await reddit.subreddit("stockphotos")
@@ -195,68 +134,6 @@ class Reddit(commands.Cog):
             embed.add_field(name=name, value="...", inline=False)
             embed.set_image(url=url)
             embed.set_footer(text="A random piece of content from r/stockphotos")
-
-            await ctx.send(embed=embed)
-        return
-
-    @commands.command(aliases=['softwaregore', 'techfail'], description="Get a random piece of content from r/softwaregore",brief="Get a random piece of content from r/softwaregore")
-    async def tehc(self, ctx):
-        async with ctx.channel.typing():
-            global reddit
-            subreddit = await reddit.subreddit("softwaregore")
-            hot = subreddit.hot(limit = 20)
-            all_subs = []
-
-            async for submission in hot:
-                all_subs.append(submission)
-
-            random_sub = random.choice(all_subs)
-            name = random_sub.title
-            url = random_sub.url
-
-            #sending calledNUM Metric to influxdb.py
-            global calledTehc, calledTehcH
-            com = "tehc"
-            calledTehc += 1
-            calledTehcH[0] += 1
-
-            sendingCom(cog, com, calledTehc)
-            
-            embed = discord.Embed(colour=colorEmbed)
-            embed.add_field(name=name, value="...", inline=False)
-            embed.set_image(url=url)
-            embed.set_footer(text="A random piece of content from r/softwaregore")
-
-            await ctx.send(embed=embed)
-        return
-
-    @commands.command(aliases=['facepalm'], description="Get a random piece of content from r/facepalm",brief="Get a random piece of content from r/facepalm")
-    async def stoopid(self, ctx):
-        async with ctx.channel.typing():
-            global reddit
-            subreddit = await reddit.subreddit("facepalm")
-            hot = subreddit.hot(limit = 20)
-            all_subs = []
-
-            async for submission in hot:
-                all_subs.append(submission)
-
-            random_sub = random.choice(all_subs)
-            name = random_sub.title
-            url = random_sub.url
-
-            #sending calledNUM Metric to influxdb.py
-            global calledStoopid, calledStoopidH
-            com = "stoopid"
-            calledStoopid += 1
-            calledStoopidH[0] += 1
-
-            sendingCom(cog, com, calledStoopid)
-            
-            embed = discord.Embed(colour=colorEmbed)
-            embed.add_field(name=name, value="...", inline=False)
-            embed.set_image(url=url)
-            embed.set_footer(text="A random piece of content from r/facepalm")
 
             await ctx.send(embed=embed)
         return
