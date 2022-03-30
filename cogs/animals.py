@@ -42,7 +42,7 @@ class images(commands.Cog):
                     calledKittyH[0] += 1
                     sendingCom(cog, com, calledKitty)
 
-                    embed = discord.Embed(colour=colorEmbed, title=":heart_eyes_cat: Meow :heart_eyes_cat: ") #sending the message
+                    embed = discord.Embed(colour=colorEmbed, title=":heart_eyes_cat:") #sending the message
                     embed.set_image(url=data['file'])
                     embed.set_footer(text="Powered by: http://random.cat")
                     await ctx.send(embed=embed)
@@ -68,7 +68,7 @@ class images(commands.Cog):
                             calledDoggoH[0] += 1
                             sendingCom(cog, com, calledDoggo)
 
-                            embed = discord.Embed(colour=colorEmbed, title=":dog: Woof Woof :dog:") #sending the message
+                            embed = discord.Embed(colour=colorEmbed, title=":dog:") #sending the message
                             embed.set_image(url=data['url'])
                             embed.set_footer(text="Powered by: http://random.dog")
                             await ctx.send(embed=embed)
@@ -86,7 +86,7 @@ class images(commands.Cog):
                     calledFoxxyH[0] += 1
                     sendingCom(cog, com, calledFoxxy)
 
-                    embed = discord.Embed(colour=colorEmbed, title="Seriosly, what does the fox say?? :fox:") #sending the message
+                    embed = discord.Embed(colour=colorEmbed, title=":fox:") #sending the message
                     embed.set_image(url=data['image'])
                     embed.set_footer(text="Powered by: https://randomfox.ca/")
 
@@ -105,7 +105,7 @@ class images(commands.Cog):
                     calledDuccyH[0] += 1
                     sendingCom(cog, com, calledDuccy)
 
-                    embed = discord.Embed(colour=colorEmbed, title="Quickidi quackidi your love is now my property!") #sending the message
+                    embed = discord.Embed(colour=colorEmbed, title=":duck:") #sending the message
                     embed.set_image(url=data['url'])
                     embed.set_footer(text="Powered by: https://random-d.uk")
 

@@ -1,5 +1,5 @@
 from discord.ext import commands, tasks
-import psutil
+import psutil, time, os
 
 from influx.influxdbExport import sendingServers
 from influx.influxdbExport import sendingSYS
@@ -12,6 +12,10 @@ class InfluxMetrix(commands.Cog):
         self.bot = bot
         self.exportServer.start()
         self.getSysData.start()
+        self.getUptime.start()
+
+    global minutes
+    minutes = 0
 
     @tasks.loop(minutes=1)
     async def exportServer(self):
@@ -42,7 +46,14 @@ class InfluxMetrix(commands.Cog):
             sendingSYS(send[i])
             i = i + 1
 
-        
+    @tasks.loop(minutes=1)
+    async def getUptime(self):
+        global minutes 
+        minutes += 1
+        hours = int(minutes / 60)
+        days = int(hours / 24)
+
+        print("the code is up for: {} days, {} hours, {} minutes".format(days, hours, minutes))
 
 
 def setup(bot):

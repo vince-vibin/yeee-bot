@@ -1,4 +1,5 @@
 import random
+import json
 
 from .model import Hangman
 
@@ -47,7 +48,10 @@ class HangmanGame:
             self.create_game(player_id)
 
     def get_random_word(self):
-        return random.choice(('discord', 'valorant', 'minecraft', 'razer', 'keyboard', 'mousepad', 'stonks', 'hamster', 'russia', 'twitch'))
+        with open("data\words.json", encoding='utf-8') as words_file:
+            words = json.load(words_file)
+            word = random.choice(list(words))
+        return word
 
     def create_game(self, player_id):
         self.current_game = Hangman(self.get_random_word())
