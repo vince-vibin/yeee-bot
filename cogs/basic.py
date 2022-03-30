@@ -4,7 +4,6 @@ from discord_slash import cog_ext, SlashContext
 
 from influx.influxdbExport import sendingCom, sendingH, sendingErrors
 
-
 # setting global var for Embed-Color
 global colorEmbed 
 colorEmbed = 0x94FFB4
@@ -66,18 +65,18 @@ class Basic(commands.Cog):
     @cog_ext.cog_slash(name="botinfo", description="Get info about the life of YeeeeeBot") # get info about the bot
     async def botinfo(self, ctx: SlashContext):
         com = "botinfo"
-        
         #sending calledNUM Metric to influxdb.py
         global calledBotinfo, calledBotinfoH
         calledBotinfo += 1
-
         #setting for called per hour
         calledBotinfoH[0] += 1
-
         sendingCom(cog, com, calledBotinfo)
+
+        from .influxdbMetrix import timeStamp
 
         embed = discord.Embed(colour=colorEmbed, title="About YeeeeeBot")
         embed.add_field(name="Servers active:", value=len(self.bot.guilds), inline=False)
+        embed.add_field(name="Uptime:", value=timeStamp, inline=False)
         embed.add_field(name="Developer/Dad :desktop:", value="YeeeeeBoi", inline=True)
         await ctx.send(embed=embed)
 
