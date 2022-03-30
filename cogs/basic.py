@@ -98,7 +98,7 @@ class Basic(commands.Cog):
         numb_voicechannels = len(guild.voice_channels)
         numb_textchannels = len(guild.text_channels)
         numb_member = (guild.member_count)
-        owner = (guild.owner)
+        owner = ctx.guild.owner
         server_icon = ctx.guild.icon_url
         description = (guild.description)
 

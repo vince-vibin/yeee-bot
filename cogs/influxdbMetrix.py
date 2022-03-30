@@ -53,7 +53,6 @@ class InfluxMetrix(commands.Cog):
 
         global timeStamp
         timeStamp = str(datetime.timedelta(seconds=seconds))
-        print(timeStamp)
         
 
 

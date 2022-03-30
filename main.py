@@ -6,7 +6,11 @@ from discord import Intents
 from dotenv import load_dotenv
 from discord_slash import SlashCommand
 
-bot = Bot(command_prefix="$", intents=Intents.default())
+
+intents = discord.Intents.default()
+intents.members = True
+
+bot = Bot(command_prefix="$", intents=intents)
 slash = SlashCommand(bot, sync_commands=True)
 bot.remove_command("help")
 
