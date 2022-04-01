@@ -19,7 +19,7 @@ Now just have fun with it :)
 The Bot also has a really fancy Dashboard using InfluxDB, wich i spend waaaaayy to much time on.<br/>
 Data is collected in the [influxdbMetrix.py](/cogs/influxdbMetrix.py) file. and send of in the [influxdbExport.py](/influx/influxdbExport.py) <br/>
 To flex here is a picture of it:<br/>
---- will be uploaded when this goes public ---<br/>
+![Dashboard in InfluxDB](/data/dashboard.JPG)<br/>
 Also just so you know all the secrets are stored in a **obviosly** not pushed `.env` file and imported where needed.
 
 ## Help
