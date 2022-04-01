@@ -35,7 +35,7 @@ class Basic(commands.Cog):
         global threwError
         threwError += 1
 
-        send = ["exHandler", threwError]
+        send = ["exHandler", threwError, ex]
 
         sendingErrors(send)
 
@@ -77,7 +77,9 @@ class Basic(commands.Cog):
         embed = discord.Embed(colour=colorEmbed, title="About YeeeeeBot")
         embed.add_field(name="Servers active:", value=len(self.bot.guilds), inline=False)
         embed.add_field(name="Uptime:", value=timeStamp, inline=False)
-        embed.add_field(name="Developer/Dad :desktop:", value="YeeeeeBoi", inline=True)
+        embed.add_field(name="Invitelink:", value="https://bit.ly/3wVcOia", inline=False)
+        embed.add_field(name="Sourcecode:", value="https://github.com/vince-vibin/yeee-bot", inline=False)
+        embed.add_field(name="Developer/Dad :desktop:", value="vince_vibin#7429", inline=True) 
         await ctx.send(embed=embed)
 
     @cog_ext.cog_slash(name="serverinfo", description="get information about the Server") # get info about the server
@@ -119,7 +121,7 @@ class Basic(commands.Cog):
 
         await ctx.send(embed=embed)
 
-    @tasks.loop(minutes=1)
+    @tasks.loop(hours=1)
     async def exporterH():
         global calledPingH, calledBotinfoH, calledServerinfoH
         send = [calledPingH, calledBotinfoH, calledServerinfoH]

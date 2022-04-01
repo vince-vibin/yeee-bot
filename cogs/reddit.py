@@ -138,7 +138,7 @@ class Reddit(commands.Cog):
             await ctx.send(embed=embed)
         return
         
-    @tasks.loop(minutes=1)
+    @tasks.loop(hours=1)
     async def exporterH():
         global calledMemeH, calledHmmH, calledDeepH, calledWholesomeH, calledStockH, calledTehcH, calledStoopidH
         send = [calledMemeH, calledHmmH, calledDeepH, calledWholesomeH, calledStockH, calledTehcH, calledStoopidH]

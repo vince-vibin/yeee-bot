@@ -2,10 +2,14 @@ from wsgiref.simple_server import sys_version
 from discord.ext.commands import Bot
 import os
 import discord
-from discord import Intents
 from dotenv import load_dotenv
 from discord_slash import SlashCommand
 
+# Invite link:
+#   https://discord.com/api/oauth2/authorize?client_id=728319090510528602&permissions=277025516544&scope=bot%20applications.commands
+
+# Github Repository 
+#   https://github.com/vince-vibin/yeee-bot 
 
 intents = discord.Intents.default()
 intents.members = True

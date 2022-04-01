@@ -1,5 +1,3 @@
-import string
-from tokenize import String
 from discord.ext import commands, tasks
 import discord
 from discord_slash import cog_ext, SlashContext
@@ -41,10 +39,10 @@ class Help(commands.Cog):
             sendingCom(cog, com, calledHelpAnimals)
 
             embed = discord.Embed(colour=0xE6A8FF, title="Help for animal commands :duck:")
-            embed.add_field(name="kitty", value="get a cute picture of a kitty ```$kitty```", inline=True)
-            embed.add_field(name="doggo", value="get a cute picture of a doggo ```$doggo```", inline=True)
-            embed.add_field(name="foxxy", value="get a cute picture of a foxxy ```$foxxy```", inline=False)
-            embed.add_field(name="duccy", value="get a cute picture of a duccy ```$duccy```", inline=True)
+            embed.add_field(name="kitty", value="get a cute picture of a kitty ```/cat```", inline=True)
+            embed.add_field(name="doggo", value="get a cute picture of a doggo ```/doggo```", inline=True)
+            embed.add_field(name="foxxy", value="get a cute picture of a foxxy ```/fox```", inline=False)
+            embed.add_field(name="duccy", value="get a cute picture of a duccy ```/duck```", inline=True)
             embed.set_footer(text="For help feel free to join this discord server: https://discord.gg/5WfYJje")
             await ctx.send(embed=embed)
         
@@ -58,9 +56,9 @@ class Help(commands.Cog):
             sendingCom(cog, com, calledHelpBasic)
 
             embed = discord.Embed(colour=0x94FFB4, title="Help for basic commands :teddy_bear:")
-            embed.add_field(name="ping", value="*Happy Table-Tennis noises* ```$ping```", inline=True)
-            embed.add_field(name="botinfo", value="Get info about my life you stalker.```$botinfo```", inline=False)
-            embed.add_field(name="serverinfo", value="Get info about my the server you stalker.```$serverinfo```", inline=True)
+            embed.add_field(name="ping", value="*Happy Table-Tennis noises* ```/ping```", inline=True)
+            embed.add_field(name="botinfo", value="Get info about my life you stalker.```/botinfo```", inline=False)
+            embed.add_field(name="serverinfo", value="Get info about my the server you stalker.```/serverinfo```", inline=True)
             embed.set_footer(text="For help feel free to join this discord server: https://discord.gg/5WfYJje")
             await ctx.send(embed=embed)
 
@@ -74,10 +72,10 @@ class Help(commands.Cog):
             sendingCom(cog, com, calledHelpFun)
 
             embed = discord.Embed(colour=0x60C14E, title="Help for fun commands :microbe:")
-            embed.add_field(name="Kanye", value="a random Kanye West quote ```$kanye```", inline=True)
-            embed.add_field(name="Yoo Mum", value="Yoo Mum is! ```$yoomum <member>```", inline=True)
-            embed.add_field(name="Magic 8Ball", value="Ask the Ball a question ```$8ball <question>```", inline=True)
-            embed.add_field(name="QR-Code", value="Generate a QR-Code to a link ```$qr <link>```", inline=True)
+            embed.add_field(name="Kanye", value="a random Kanye West quote ```/kanye```", inline=True)
+            embed.add_field(name="Yoo Mum", value="Yoo Mum is! ```/yoomum <member>```", inline=True)
+            embed.add_field(name="Magic 8Ball", value="Ask the Ball a question ```/8ball <question>```", inline=True)
+            embed.add_field(name="QR-Code", value="Generate a QR-Code to anything ```/qr <link>```", inline=True)
             embed.set_footer(text="For help feel free to join this discord server: https://discord.gg/5WfYJje")
             await ctx.send(embed=embed)
 
@@ -92,10 +90,10 @@ class Help(commands.Cog):
             
             embed = discord.Embed(colour=0x00FFEC, title="Help for game commands :video_game:")
             embed.add_field(name="Rock, Paper, Scissors", value="Play Rock, Paper, Scissors ```$rps <rock/paper/scissor>```", inline=True)
-            embed.add_field(name="hangman", value="Play Hangman ```$hm <guess>```", inline=True)
-            embed.add_field(name="roll", value="Get a random number from any range you want. But Whuay?? ```$roll <max-number> <bet (OPTIONAl)>```", inline=True)
-            embed.add_field(name="dice", value="Roll a dice cause you dont have any hobbys. ```$dice <bet (OPTIONAl)>```", inline=True)
-            embed.add_field(name="coinflip", value="Just flip a coin (i dont know whuay you would). ```$coinflip/coin <bet (OPTIONAl)>```", inline=True)
+            embed.add_field(name="hangman", value="Play Hangman ```/hm <guess>```", inline=True)
+            embed.add_field(name="roll", value="Get a random number from any range you want. But Whuay?? ```/roll <max-number> <bet (OPTIONAl)>```", inline=True)
+            embed.add_field(name="dice", value="Roll a dice cause you dont have any hobbys. ```/dice <bet (OPTIONAl)>```", inline=True)
+            embed.add_field(name="coinflip", value="Just flip a coin (i dont know whuay you would). ```/coin <bet (OPTIONAl)>```", inline=True)
             embed.set_footer(text="For help feel free to join this discord server: https://discord.gg/5WfYJje")
             await ctx.send(embed=embed)
 
@@ -109,11 +107,9 @@ class Help(commands.Cog):
             sendingCom(cog, com, calledHelpReddit)
 
             embed = discord.Embed(colour=0xA8FFD5, title="Help for reddit commands :art:")
-            embed.add_field(name="meme", value="Get a random piece of content from r/memes ```$meme```", inline=True)
-            embed.add_field(name="hmm", value="Get a random piece of content from r/mhh```$hmm```", inline=True)
-            embed.add_field(name="deep", value="Get a random piece of content from r/im14andthisisdeep```$deep```", inline=True)
-            embed.add_field(name="wholesome", value="Get a random piece of content from r/wholesomememes```$wholesome```", inline=True)
-            embed.add_field(name="facepalm", value="Get a random piece of content from r/facepalm```$facepalm```", inline=True)
+            embed.add_field(name="meme", value="Get a random piece of content from r/memes ```/meme```", inline=True)
+            embed.add_field(name="wholesome", value="Get a random piece of content from r/wholesomememes```/wholesome```", inline=True)
+            embed.add_field(name="wholesome", value="Get a random piece of content from r/wtfstock```/stock```", inline=True)
             embed.set_footer(text="For help feel free to join this discord server: https://discord.gg/5WfYJje")
             await ctx.send(embed=embed)
 
@@ -127,15 +123,15 @@ class Help(commands.Cog):
             sendingCom(cog, com, calledHelp)
 
             embed = discord.Embed(colour=discord.Colour.green(), title="Help commands")
-            embed.add_field(name="animals :duck:", value="```$help animals```", inline=True)
-            embed.add_field(name="basic :teddy_bear:", value="```$help basic```", inline=True)
-            embed.add_field(name="fun :microbe:", value="```$help fun```", inline=True)
-            embed.add_field(name="games :video_game:", value="```$help games```", inline=True)
-            embed.add_field(name="reddit :camera_with_flash:", value="```$help reddit```", inline=True)
+            embed.add_field(name="animals :duck:", value="```/help animals```", inline=True)
+            embed.add_field(name="basic :teddy_bear:", value="```/help basic```", inline=True)
+            embed.add_field(name="fun :microbe:", value="```/help fun```", inline=True)
+            embed.add_field(name="games :video_game:", value="```/help games```", inline=True)
+            embed.add_field(name="reddit :camera_with_flash:", value="```/help reddit```", inline=True)
             embed.set_footer(text="For help feel free to join this discord server: https://discord.gg/5WfYJje")
             await ctx.send(embed=embed)
 
-    @tasks.loop(minutes=1)
+    @tasks.loop(hours=1)
     async def exporterH():
         global calledHelpH, calledHelpAnimalsH, calledHelpBasicH, calledHelpFunH, calledHelpGamesH, calledHelpRedditH
         send = [calledHelpH, calledHelpAnimalsH, calledHelpBasicH, calledHelpFunH, calledHelpGamesH, calledHelpRedditH]

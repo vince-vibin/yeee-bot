@@ -111,7 +111,7 @@ class images(commands.Cog):
 
                     await ctx.send(embed=embed)
 
-    @tasks.loop(minutes=1)
+    @tasks.loop(hours=1)
     async def exporterH():
         global calledKittyH, calledDoggoH, calledFoxxyH, calledDuccyH
         send = [calledKittyH, calledDoggoH, calledFoxxyH, calledDuccyH]

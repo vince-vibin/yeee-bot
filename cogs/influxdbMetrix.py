@@ -18,13 +18,13 @@ class InfluxMetrix(commands.Cog):
     global startTime, timeStamp
     startTime = time.time()
 
-    @tasks.loop(minutes=1)
+    @tasks.loop(minutes=10)
     async def exportServer(self):
         serversNum = len(self.bot.guilds)
 
         sendingServers(serversNum)
 
-    @tasks.loop(minutes=1)
+    @tasks.loop(minutes=5)
     async def getSysData(self):
         ram = psutil.virtual_memory()
         disk = psutil.disk_usage("/")

@@ -17,12 +17,12 @@ global cog
 
 cog = "fun"
 calledYoomum = 0
-calledSmort = 0
+calledKanye = 0
 calledMagicball = 0
 calledQrcode = 0
 
 calledYoomumH = [0, "yoomum", cog] 
-calledSmortH = [0, "smort", cog]
+calledKanyeH = [0, "kanye", cog]
 calledMagicballH = [0, "magicball", cog]
 calledQrcodeH = [0, "qrcode", cog]
 
@@ -43,7 +43,6 @@ class fun(commands.Cog):
         with open("data\yoomum.json", encoding='utf-8') as yoomum_file:
             yoomum = json.load(yoomum_file)
             random_category = random.choice(list(yoomum.keys()))
-            print(random_category)
             yoomum = random.choice(list(yoomum[random_category]))
 
         if member is not None:
@@ -65,12 +64,12 @@ class fun(commands.Cog):
             wisdom = random.choice(list(wisdom))
 
         #sending calledNUM Metric to influxdb.py
-        global calledSmort, calledSmortH
+        global calledKanye, calledKanyeH
         com = "kanye"
-        calledSmort += 1
-        calledSmortH[0] += 1
+        calledKanye += 1
+        calledKanyeH[0] += 1
 
-        sendingCom(cog, com, calledSmort)
+        sendingCom(cog, com, calledKanye)
 
         embed = discord.Embed(colour=colorEmbed)
         embed.add_field(name=wisdom, value="This is a random quote by Kanye West", inline=False)
@@ -99,9 +98,9 @@ class fun(commands.Cog):
         await ctx.send(embed=embed)
     
     @cog_ext.cog_slash(name="qr", description="Create a qrcode to a link") #generating a qr code based on the profided link=data
-    async def qrcode(self, ctx: SlashContext, link):
+    async def qrcode(self, ctx: SlashContext, arg):
         qr = qrcode.QRCode(version=1, box_size=10, border=5)
-        data = link
+        data = arg
 
         qr.add_data(data)
         qr.make(fit=True)
@@ -122,10 +121,10 @@ class fun(commands.Cog):
 
         os.remove("data/qr_code.png")
 
-    @tasks.loop(minutes=1)
+    @tasks.loop(hours=1)
     async def exporterH():
-        global calledYoomumH, calledSmortH, calledMagicballH, calledQrcodeH
-        send = [calledYoomumH, calledSmortH, calledMagicballH, calledQrcodeH]
+        global calledYoomumH, calledKanyeH, calledMagicballH, calledQrcodeH
+        send = [calledYoomumH, calledKanyeH, calledMagicballH, calledQrcodeH]
         i = 0
 
         while i < len(send): #looping throught send array
@@ -133,7 +132,7 @@ class fun(commands.Cog):
             i = i + 1
 
         calledYoomumH[0] = 0 #reseting all values 
-        calledSmortH[0] = 0
+        calledKanyeH[0] = 0
         calledMagicballH[0] = 0
         calledQrcodeH[0] = 0
 

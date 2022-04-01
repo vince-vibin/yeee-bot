@@ -42,7 +42,7 @@ class Games(commands.Cog):
     async def rps(self, ctx: SlashContext, user_choice:RockPaperScissorsConverter): # used controller.py and model.py in rps/
         rps_m = RPS()
         bot_choice = random.choice(rps_m.get_choices()) # getting random choice form rps/model.py closs RPS
-        user_choice = user_choice.choice
+        user_choice = user_choice.lower()
 
         if user_choice is not None: # just magic
             winner_check = { # compairing choices 
@@ -62,13 +62,13 @@ class Games(commands.Cog):
 
             if won is None: # sending if choices are the same
                 colour=colorEmbed
-                message="Thats a close one, cunt!"
+                message="Thats a close one, cunt! :cold_face: :cold_face:"
             elif won is True: # bot has won
                 colour=colorEmbed
-                message="Your sutch a Noob go cry to your momma"
+                message="Your a noob go cry to your momma :skull: :skull:"
             elif won is False: # bot has lost
                 colour=colorEmbed
-                message="I am defeated. Now I'm going to cry over there"
+                message="I am defeated. :sleepy: :sleepy:"
 
             #sending calledNUM Metric to influxdb.py
             global calledRPS, calledRPSH
@@ -79,7 +79,7 @@ class Games(commands.Cog):
             sendingCom(cog, com, calledRPS)
 
             embed = discord.Embed(colour=colour)
-            embed.add_field(name=bot_choice, value=message, inline=False)
+            embed.add_field(name="Your choice: {} :vs: YeeeeBots choice: {}".format(user_choice, bot_choice), value=message, inline=False)
             await ctx.send(embed=embed)
 
 
@@ -242,7 +242,7 @@ class Games(commands.Cog):
                 embed.set_footer(text="Try again")
                 await ctx.send(embed=embed)
     
-    @tasks.loop(minutes=1)
+    @tasks.loop(hours=1)
     async def exporterH():
         global calledRPSH, calledHangmanH, calledRollH, calledDiceH, calledCoinflipH
         send = [calledRPSH, calledHangmanH, calledRollH, calledDiceH, calledCoinflipH]
