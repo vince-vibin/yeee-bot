@@ -43,7 +43,6 @@ class fun(commands.Cog):
         with open("data\yoomum.json", encoding='utf-8') as yoomum_file:
             yoomum = json.load(yoomum_file)
             random_category = random.choice(list(yoomum.keys()))
-            print(random_category)
             yoomum = random.choice(list(yoomum[random_category]))
 
         if member is not None:
@@ -122,7 +121,7 @@ class fun(commands.Cog):
 
         os.remove("data/qr_code.png")
 
-    @tasks.loop(minutes=1)
+    @tasks.loop(hours=1)
     async def exporterH():
         global calledYoomumH, calledKanyeH, calledMagicballH, calledQrcodeH
         send = [calledYoomumH, calledKanyeH, calledMagicballH, calledQrcodeH]

@@ -121,7 +121,7 @@ class Basic(commands.Cog):
 
         await ctx.send(embed=embed)
 
-    @tasks.loop(minutes=1)
+    @tasks.loop(hours=1)
     async def exporterH():
         global calledPingH, calledBotinfoH, calledServerinfoH
         send = [calledPingH, calledBotinfoH, calledServerinfoH]

@@ -2,7 +2,6 @@ from wsgiref.simple_server import sys_version
 from discord.ext.commands import Bot
 import os
 import discord
-from discord import Intents
 from dotenv import load_dotenv
 from discord_slash import SlashCommand
 

@@ -242,7 +242,7 @@ class Games(commands.Cog):
                 embed.set_footer(text="Try again")
                 await ctx.send(embed=embed)
     
-    @tasks.loop(minutes=1)
+    @tasks.loop(hours=1)
     async def exporterH():
         global calledRPSH, calledHangmanH, calledRollH, calledDiceH, calledCoinflipH
         send = [calledRPSH, calledHangmanH, calledRollH, calledDiceH, calledCoinflipH]

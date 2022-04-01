@@ -93,7 +93,7 @@ class Help(commands.Cog):
             embed.add_field(name="hangman", value="Play Hangman ```/hm <guess>```", inline=True)
             embed.add_field(name="roll", value="Get a random number from any range you want. But Whuay?? ```/roll <max-number> <bet (OPTIONAl)>```", inline=True)
             embed.add_field(name="dice", value="Roll a dice cause you dont have any hobbys. ```/dice <bet (OPTIONAl)>```", inline=True)
-            embed.add_field(name="coinflip", value="Just flip a coin (i dont know whuay you would). ```/coinflip/coin <bet (OPTIONAl)>```", inline=True)
+            embed.add_field(name="coinflip", value="Just flip a coin (i dont know whuay you would). ```/coin <bet (OPTIONAl)>```", inline=True)
             embed.set_footer(text="For help feel free to join this discord server: https://discord.gg/5WfYJje")
             await ctx.send(embed=embed)
 
@@ -131,7 +131,7 @@ class Help(commands.Cog):
             embed.set_footer(text="For help feel free to join this discord server: https://discord.gg/5WfYJje")
             await ctx.send(embed=embed)
 
-    @tasks.loop(minutes=1)
+    @tasks.loop(hours=1)
     async def exporterH():
         global calledHelpH, calledHelpAnimalsH, calledHelpBasicH, calledHelpFunH, calledHelpGamesH, calledHelpRedditH
         send = [calledHelpH, calledHelpAnimalsH, calledHelpBasicH, calledHelpFunH, calledHelpGamesH, calledHelpRedditH]
