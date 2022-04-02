@@ -40,7 +40,7 @@ class fun(commands.Cog):
 
         sendingCom(cog, com, calledYoomum)
 
-        with open("data\\yoomum.json", encoding='utf-8') as yoomum_file:
+        with open("data/yoomum.json", encoding='utf-8') as yoomum_file:
             yoomum = json.load(yoomum_file)
             random_category = random.choice(list(yoomum.keys()))
             yoomum = random.choice(list(yoomum[random_category]))
@@ -59,7 +59,7 @@ class fun(commands.Cog):
     
     @cog_ext.cog_slash(name="kanye", description="get a random Kanye West quote") # getting a random wisdom from data/weisheiten.json
     async def kanye(self, ctx: SlashContext):
-        with open("data\\kanyerest.json", encoding='utf-8') as wisdom_file:
+        with open("data/kanyerest.json", encoding='utf-8') as wisdom_file:
             wisdom = json.load(wisdom_file)
             wisdom = random.choice(list(wisdom))
 
@@ -87,7 +87,7 @@ class fun(commands.Cog):
 
         sendingCom(cog, com, calledMagicball)
 
-        with open("data\\8ball.json", encoding='utf-8') as answers_file:
+        with open("data/8ball.json", encoding='utf-8') as answers_file:
             answers = json.load(answers_file)
             random_category = random.choice(list(answers.keys()))
             answers = random.choice(list(answers[random_category]))

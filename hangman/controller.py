@@ -48,7 +48,7 @@ class HangmanGame:
             self.create_game(player_id)
 
     def get_random_word(self):
-        with open("data\\words.json", encoding='utf-8') as words_file:
+        with open("data/words.json", encoding='utf-8') as words_file:
             words = json.load(words_file)
             word = random.choice(list(words))
         return word
