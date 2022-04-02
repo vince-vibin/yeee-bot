@@ -79,6 +79,7 @@ class Basic(commands.Cog):
         embed.add_field(name="Uptime:", value=timeStamp, inline=False)
         embed.add_field(name="Invitelink:", value="https://bit.ly/3wVcOia", inline=False)
         embed.add_field(name="Sourcecode:", value="https://github.com/vince-vibin/yeee-bot", inline=False)
+        embed.add_field(name="Feel free to upvote at:", value="https://discordbotlist.com/bots/yeeeebot", inline=False)
         embed.add_field(name="Developer/Dad :desktop:", value="vince_vibin#7429", inline=True) 
         await ctx.send(embed=embed)
 
