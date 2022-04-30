@@ -33,7 +33,9 @@ class images(commands.Cog):
 
             async with aiohttp.ClientSession() as cs: #making the http-Request
                 async with cs.get("http://aws.random.cat/meow") as r:
+                    
                     data = await r.json()
+                    print(data)
 
                     #sending calledNUM Metric to influxdb.py
                     global calledKitty, calledKittyH
