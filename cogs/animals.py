@@ -35,7 +35,8 @@ class images(commands.Cog):
                 async with cs.get("http://aws.random.cat/meow") as r:
                     
                     data = await r.json(content_type=None)
-
+                    print(data)
+                    
                     #sending calledNUM Metric to influxdb.py
                     global calledKitty, calledKittyH
                     calledKitty += 1
