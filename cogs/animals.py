@@ -32,10 +32,10 @@ class images(commands.Cog):
         async with ctx.channel.typing():
 
             async with aiohttp.ClientSession() as cs: #making the http-Request
-                async with cs.get("http://aws.random.cat/meow") as r:
-                    
-                    data = await r.json(content_type=None)
-                    print(data)
+                async with cs.get("https://api.thecatapi.com/v1/images/search") as r:
+
+                    data = await r.json(content_type="application/json")
+                    url=data[0]
                     
                     #sending calledNUM Metric to influxdb.py
                     global calledKitty, calledKittyH
@@ -45,7 +45,8 @@ class images(commands.Cog):
                     sendingCom(cog, com, calledKitty)
 
                     embed = discord.Embed(colour=colorEmbed, title=":heart_eyes_cat:") #sending the message
-                    embed.set_image(url=data['file'])
+                    embed.set_image(url=url["url"])
+
                     embed.set_footer(text="Powered by: http://random.cat")
                     await ctx.send(embed=embed)
     
