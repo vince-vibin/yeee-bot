@@ -8,6 +8,7 @@ from influx.influxdbExport import sendingSYS
 # This file is used to get Metrix for InfluxDB about uptime number of servers and more
 # it s in a cog to be initalized when the bot is starting up
 
+
 class InfluxMetrix(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -50,9 +51,10 @@ class InfluxMetrix(commands.Cog):
     @tasks.loop(minutes=1)
     async def getUptime(self):
         seconds = round(time.time() - startTime)
-
-        global timeStamp
+        
+        #global timeStamp
         timeStamp = str(datetime.timedelta(seconds=seconds))
+        return timeStamp
         
 
 
