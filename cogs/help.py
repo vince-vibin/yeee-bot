@@ -1,9 +1,10 @@
 from discord.ext import commands, tasks
 import discord
-from discord_slash import cog_ext, SlashContext
+from discord import app_commands
 
 #vars for calling sending func
 from influx.influxdbExport import sendingCom, sendingH
+
 global cog
 
 cog = "help"
@@ -22,12 +23,11 @@ calledHelpGamesH = [0, "helpGames", cog]
 calledHelpRedditH = [0, "helpReddit", cog]
 
 class Help(commands.Cog):
-    def __init__(self, bot):
-        self.bot = bot
+  def __init__(self, bot: commands.Bot) -> None:
+    self.bot = bot
 
-
-    @cog_ext.cog_slash(name="help", description="get help") # help command with no or unkown argument
-    async def help(self, ctx: SlashContext, arg = None):
+    @app_commands.command(name="help", description="get help") # help command with no or unkown argument
+    async def help(interaction: discord.Interaction, arg : str = None) -> None :
 
         if arg != None and arg.lower() == "animals":
             #sending calledNUM Metric to influxdb.py
@@ -43,8 +43,8 @@ class Help(commands.Cog):
             embed.add_field(name="doggo", value="get a cute picture of a doggo ```/doggo```", inline=True)
             embed.add_field(name="foxxy", value="get a cute picture of a foxxy ```/fox```", inline=False)
             embed.add_field(name="duccy", value="get a cute picture of a duccy ```/duck```", inline=True)
-            embed.set_footer(text="For help feel free to join this discord server: https://discord.gg/5WfYJje")
-            await ctx.send(embed=embed)
+            embed.set_footer(text="For help feel free to join my discord server: https://discord.gg/5WfYJje")
+            await interaction.response.send_message(embed=embed, ephemeral=True)
         
         elif arg != None and arg.lower() == "basic":
             #sending calledNUM Metric to influxdb.py
@@ -59,8 +59,8 @@ class Help(commands.Cog):
             embed.add_field(name="ping", value="*Happy Table-Tennis noises* ```/ping```", inline=True)
             embed.add_field(name="botinfo", value="Get info about my life you stalker.```/botinfo```", inline=False)
             embed.add_field(name="serverinfo", value="Get info about my the server you stalker.```/serverinfo```", inline=True)
-            embed.set_footer(text="For help feel free to join this discord server: https://discord.gg/5WfYJje")
-            await ctx.send(embed=embed)
+            embed.set_footer(text="For help feel free to join my discord server: https://discord.gg/5WfYJje")
+            await interaction.response.send_message(embed=embed, ephemeral=True)
 
         elif arg != None and  arg.lower() == "fun":
             #sending calledNUM Metric to influxdb.py
@@ -76,8 +76,8 @@ class Help(commands.Cog):
             embed.add_field(name="Yoo Mum", value="Yoo Mum is! ```/yoomum <member>```", inline=True)
             embed.add_field(name="Magic 8Ball", value="Ask the Ball a question ```/8ball <question>```", inline=True)
             embed.add_field(name="QR-Code", value="Generate a QR-Code to anything ```/qr <link>```", inline=True)
-            embed.set_footer(text="For help feel free to join this discord server: https://discord.gg/5WfYJje")
-            await ctx.send(embed=embed)
+            embed.set_footer(text="For help feel free to join my discord server: https://discord.gg/5WfYJje")
+            await interaction.response.send_message(embed=embed, ephemeral=True)
 
         elif arg != None and arg.lower() == "games":
             #sending calledNUM Metric to influxdb.py
@@ -90,12 +90,12 @@ class Help(commands.Cog):
             
             embed = discord.Embed(colour=0x00FFEC, title="Help for game commands :video_game:")
             embed.add_field(name="Rock, Paper, Scissors", value="Play Rock, Paper, Scissors ```$rps <rock/paper/scissor>```", inline=True)
-            embed.add_field(name="hangman", value="Play Hangman ```/hm <guess>```", inline=True)
-            embed.add_field(name="roll", value="Get a random number from any range you want. But Whuay?? ```/roll <max-number> <bet (OPTIONAl)>```", inline=True)
-            embed.add_field(name="dice", value="Roll a dice cause you dont have any hobbys. ```/dice <bet (OPTIONAl)>```", inline=True)
+            embed.add_field(name="hangman", value="Play Hangman ```/hm <guess>```", inline=False)
+            embed.add_field(name="roll", value="Get a random number from any range you want. But Whuay?? ```/roll <max-number> <bet (OPTIONAl)>```", inline=False)
+            embed.add_field(name="dice", value="Roll a dice cause you dont have any hobbys. ```/dice <bet (OPTIONAl)>```", inline=False)
             embed.add_field(name="coinflip", value="Just flip a coin (i dont know whuay you would). ```/coin <bet (OPTIONAl)>```", inline=True)
-            embed.set_footer(text="For help feel free to join this discord server: https://discord.gg/5WfYJje")
-            await ctx.send(embed=embed)
+            embed.set_footer(text="For help feel free to join my discord server: https://discord.gg/5WfYJje")
+            await interaction.response.send_message(embed=embed, ephemeral=True)
 
         elif arg != None and arg.lower() == "reddit":
             #sending calledNUM Metric to influxdb.py
@@ -107,11 +107,11 @@ class Help(commands.Cog):
             sendingCom(cog, com, calledHelpReddit)
 
             embed = discord.Embed(colour=0xA8FFD5, title="Help for reddit commands :art:")
-            embed.add_field(name="meme", value="Get a random piece of content from r/memes ```/meme```", inline=True)
-            embed.add_field(name="wholesome", value="Get a random piece of content from r/wholesomememes```/wholesome```", inline=True)
-            embed.add_field(name="wholesome", value="Get a random piece of content from r/wtfstock```/stock```", inline=True)
-            embed.set_footer(text="For help feel free to join this discord server: https://discord.gg/5WfYJje")
-            await ctx.send(embed=embed)
+            embed.add_field(name="meme", value="Get a random piece of content from r/memes ```/meme```", inline=False)
+            embed.add_field(name="wholesome", value="Get a random piece of content from r/wholesomememes```/wholesome```", inline=False)
+            embed.add_field(name="wholesome", value="Get a random piece of content from r/wtfstock```/stock```", inline=False)
+            embed.set_footer(text="For help feel free to join my discord server: https://discord.gg/5WfYJje")
+            await interaction.response.send_message(embed=embed, ephemeral=True)
 
         else:
             #sending calledNUM Metric to influxdb.py
@@ -128,8 +128,8 @@ class Help(commands.Cog):
             embed.add_field(name="fun :microbe:", value="```/help fun```", inline=True)
             embed.add_field(name="games :video_game:", value="```/help games```", inline=True)
             embed.add_field(name="reddit :camera_with_flash:", value="```/help reddit```", inline=True)
-            embed.set_footer(text="For help feel free to join this discord server: https://discord.gg/5WfYJje")
-            await ctx.send(embed=embed)
+            embed.set_footer(text="For help feel free to join my discord server: https://discord.gg/5WfYJje")
+            await interaction.response.send_message(embed=embed, ephemeral=True)
 
     @tasks.loop(hours=1)
     async def exporterH():
@@ -150,5 +150,7 @@ class Help(commands.Cog):
         
     exporterH.start()
 
-def setup(bot):
-    bot.add_cog(Help(bot))
+    bot.tree.add_command(help)
+
+async def setup(bot: commands.Bot) -> None:
+  await bot.add_cog(Help(bot))

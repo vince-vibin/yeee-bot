@@ -1,7 +1,7 @@
 from discord.ext import commands, tasks
 import aiohttp
 import discord
-from discord_slash import cog_ext, SlashContext
+from discord import app_commands
 
 # setting global var for Embed-Color
 global colorEmbed 
@@ -22,14 +22,14 @@ calledDoggoH = [0, "doggo", cog]
 calledFoxxyH = [0, "foxxy", cog]
 calledDuccyH = [0, "duccy", cog]
 
-class images(commands.Cog):
-    def __init__(self, bot):
-        self.bot = bot
+class Animals(commands.Cog):
+  def __init__(self, bot: commands.Bot) -> None:
+    self.bot = bot
 
 
-    @cog_ext.cog_slash(name="cat", description="get a random pic of a cat") #sending a random cat pic from random.cat
-    async def cat(self, ctx: SlashContext):
-        async with ctx.channel.typing():
+    @app_commands.command(name="cat", description="get a cute pic of a cat") #sending a random cat pic from random.cat
+    async def cat(interaction: discord.interactions.Interaction) -> None:
+        async with interaction.channel.typing():
 
             async with aiohttp.ClientSession() as cs: #making the http-Request
                 async with cs.get("https://api.thecatapi.com/v1/images/search") as r:
@@ -48,11 +48,12 @@ class images(commands.Cog):
                     embed.set_image(url=url["url"])
 
                     embed.set_footer(text="Powered by: http://random.cat")
-                    await ctx.send(embed=embed)
+                    
+                    await interaction.response.send_message(embed=embed, ephemeral=False)
     
-    @cog_ext.cog_slash(name="doggo", description="get a random pic of a dog") # sending a random dog pic from random.dog
-    async def doggo(self, ctx: SlashContext):
-        async with ctx.channel.typing():
+    @app_commands.command(name="doggo", description="get a cute pic of a doggo") # sending a random dog pic from random.dog
+    async def doggo(interaction: discord.interactions.Interaction) -> None:
+        async with interaction.channel.typing():
             gotPic = False
             while not gotPic:
                 async with aiohttp.ClientSession() as cs: #making the http-Request
@@ -74,11 +75,11 @@ class images(commands.Cog):
                             embed = discord.Embed(colour=colorEmbed, title=":dog:") #sending the message
                             embed.set_image(url=data['url'])
                             embed.set_footer(text="Powered by: http://random.dog")
-                            await ctx.send(embed=embed)
+                            await interaction.response.send_message(embed=embed, ephemeral=False)
 
-    @cog_ext.cog_slash(name="fox",description="get a random pic of a fox") # sending a random  fox pic from randomfox.ca
-    async def fox(self, ctx: SlashContext):
-        async with ctx.channel.typing():
+    @app_commands.command(name="fox", description="get a cute pic of a fox") # sending a random  fox pic from randomfox.ca
+    async def fox(interaction: discord.interactions.Interaction) -> None:
+        async with interaction.channel.typing():
             async with aiohttp.ClientSession() as cs: #making the http-Request
                 async with cs.get("https://randomfox.ca/floof/") as r:
                     data = await r.json()
@@ -93,11 +94,11 @@ class images(commands.Cog):
                     embed.set_image(url=data['image'])
                     embed.set_footer(text="Powered by: https://randomfox.ca/")
 
-                    await ctx.send(embed=embed)
+                    await interaction.response.send_message(embed=embed, ephemeral=False)
 
-    @cog_ext.cog_slash(name="duck",description="get a random pic of a duck") # sending a random duck pic from random-d.uk
-    async def duccy(self, ctx: SlashContext):
-        async with ctx.channel.typing():
+    @app_commands.command(name="duccy", description="get a cute pic of a duck") # sending a random duck pic from random-d.uk
+    async def duccy(interaction: discord.interactions.Interaction) -> None:
+        async with interaction.channel.typing():
             async with aiohttp.ClientSession() as cs: #making the http-Request
                 async with cs.get("https://random-d.uk/api/random") as r:
                     data = await r.json()
@@ -112,7 +113,7 @@ class images(commands.Cog):
                     embed.set_image(url=data['url'])
                     embed.set_footer(text="Powered by: https://random-d.uk")
 
-                    await ctx.send(embed=embed)
+                    await interaction.response.send_message(embed=embed, ephemeral=False)
 
     @tasks.loop(hours=1)
     async def exporterH():
@@ -128,8 +129,13 @@ class images(commands.Cog):
         calledDoggoH[0] = 0
         calledFoxxyH[0] = 0
         calledDuccyH[0] = 0
-        
+
+    bot.tree.add_command(cat, override=True)
+    bot.tree.add_command(doggo, override=True)
+    bot.tree.add_command(fox, override=True)
+    bot.tree.add_command(duccy, override=True)
+
     exporterH.start()
 
-def setup(bot):
-    bot.add_cog(images(bot))
+async def setup(bot: commands.Bot) -> None:
+  await bot.add_cog(Animals(bot))
