@@ -1,5 +1,5 @@
 from discord.ext import commands, tasks
-from discord_slash import cog_ext, SlashContext
+from discord import app_commands
 import discord
 
 from rps.converter import RockPaperScissorsConverter
@@ -35,13 +35,13 @@ calledCoinflipH = [0, "coinflip", cog]
 
 
 class Games(commands.Cog):
-    def __init__(self, bot):
-        self.bot = bot
+  def __init__(self, bot: commands.Bot) -> None:
+    self.bot = bot
 
-    @cog_ext.cog_slash(name="rps", description="Play Rock, Paper, Scissors against your friend replacement.") # Rock, Paper, Scissors game
-    async def rps(self, ctx: SlashContext, user_choice:RockPaperScissorsConverter): # used controller.py and model.py in rps/
+    @app_commands.command(name="rps", description="play rock paper scissors against me") # Rock, Paper, Scissors game
+    async def rps(interaction: discord.Interaction, user_choice: str) -> None: # used controller.py and model.py in rps/
         rps_m = RPS()
-        bot_choice = random.choice(rps_m.get_choices()) # getting random choice form rps/model.py closs RPS
+        bot_choice = random.choice(rps_m.get_choices()) # getting random choice form rps/model.py class RPS
         user_choice = user_choice.lower()
 
         if user_choice is not None: # just magic
@@ -78,14 +78,18 @@ class Games(commands.Cog):
 
             sendingCom(cog, com, calledRPS)
 
+            emoji = {"rock": ":rock:", "paper": ":roll_of_paper:", "scissors": ":scissors:"}
+
             embed = discord.Embed(colour=colour)
-            embed.add_field(name="Your choice: {} :vs: YeeeeBots choice: {}".format(user_choice, bot_choice), value=message, inline=False)
-            await ctx.send(embed=embed)
+            embed.add_field(name="your choice", value="{} {}".format(user_choice, emoji[user_choice]), inline=True)
+            embed.add_field(name="my choice", value="{} {}".format(bot_choice, emoji[bot_choice]), inline=True)
+            embed.add_field(name="Conclusion", value=message, inline=False)
+            await interaction.response.send_message(embed=embed, ephemeral=False)
 
 
-    @cog_ext.cog_slash(name="hm", description="Play Hangman against your friend replacement.") # the hangman game
-    async def hangman(self, ctx: SlashContext, guess: str): # used controller.py and model.py in hangman/ 
-        player_id = ctx.author.id
+    @app_commands.command(name="hangman", description="play hangman") # the hangman game
+    async def hangman(interaction: discord.Interaction, guess: str) -> None: # used controller.py and model.py in hangman/ 
+        player_id = interaction.user.id
         hangman_instance = HangmanGame()
         game_over, won = hangman_instance.run(player_id, guess)
 
@@ -111,16 +115,16 @@ class Games(commands.Cog):
             
             embed = discord.Embed(colour=colorEmbed)
             embed.add_field(name=titel, value=game_over_message, inline=False)
-            await ctx.send(embed=embed)
+            await interaction.response.send_message(embed=embed, ephemeral=False)
 
         else:
             embed = discord.Embed(colour=colorEmbed)
             embed.add_field(name="Progress:", value=hangman_instance.get_progress_string(), inline=False)
             embed.add_field(name="Guesses so far:", value=hangman_instance.get_guess_string(), inline=False)
-            await ctx.send(embed=embed)
+            await interaction.response.send_message(embed=embed, ephemeral=False)
     
-    @cog_ext.cog_slash(name="roll", description="Get a random number from 1 to anything you like. But Whuay??")
-    async def roll(self, ctx: SlashContext, range: int, bet: int = None):
+    @app_commands.command(name="roll", description="roll a random number from 0 to n (maybe even bet on one)")
+    async def roll(interaction: discord.Interaction, range: int, bet: int = None) -> None:
 
         #sending calledNUM Metric to influxdb.py
         global calledRoll, calledRollH
@@ -141,7 +145,7 @@ class Games(commands.Cog):
                         embed.add_field(name="Your bet was: ", value=bet, inline=True)
                         embed.add_field(name="Conclusion: ", value="You fucking did it you finally achieved something in your life", inline=False)
                         embed.set_footer(text="Now move on with your live and get hobbys.")
-                        await ctx.send(embed=embed)
+                        await interaction.response.send_message(embed=embed, ephemeral=False)
                     else: 
                         embed = discord.Embed(colour=colorEmbed)
                         embed.add_field(name="You got: ", value=n, inline=True)
@@ -149,27 +153,27 @@ class Games(commands.Cog):
                         embed.add_field(name="Your bet was: ", value=bet, inline=True)
                         embed.add_field(name="Conclusion: ", value="You're a loser. And will have gambeling issues in your life", inline=False)
                         embed.set_footer(text="Now move on with your live and get hobbys.")
-                        await ctx.send(embed=embed)
+                        await interaction.response.send_message(embed=embed, ephemeral=False)
                 else:
                     embed = discord.Embed(colour=colorEmbed)
                     embed.add_field(name="Idiot", value="Your bet cant be higher then your range. OBVIOSLY ", inline=False)
                     embed.set_footer(text="Try again")
-                    await ctx.send(embed=embed)
+                    await interaction.response.send_message(embed=embed, ephemeral=False)
             else:
                 embed = discord.Embed(colour=colorEmbed)
                 embed.add_field(name="You got: ", value=n, inline=True)
                 embed.add_field(name="From a range from 1 to: ", value=range, inline=True)
                 embed.add_field(name="Conclusion: ", value="I dont care", inline=False)
                 embed.set_footer(text="Now move on with your live and get hobbys.")
-                await ctx.send(embed=embed)
+                await interaction.response.send_message(embed=embed, ephemeral=False)
         else:
             embed = discord.Embed(colour=colorEmbed)
             embed.add_field(name="Idiot", value="Range has to be higher then 1. OBVIOSLY ", inline=False)
             embed.set_footer(text="Try again")
-            await ctx.send(embed=embed)
+            await interaction.response.send_message(embed=embed, ephemeral=False) 
 
-    @cog_ext.cog_slash(name="dice", description="Roll a dice cause you dont have any hobbys.")
-    async def dice(self, ctx: SlashContext, bet: int = None):
+    @app_commands.command(name="dice", description="roll a dice (maybe even bet on a number)")
+    async def dice(interaction: discord.Interaction, bet: int = None) -> None:
         n = random.randrange(1, 6)
 
         #sending calledNUM Metric to influxdb.py
@@ -185,7 +189,7 @@ class Games(commands.Cog):
                 embed = discord.Embed(colour=colorEmbed)
                 embed.add_field(name="Idiot", value="Your bet cant be higher then your 6. OBVIOSLY ", inline=False)
                 embed.set_footer(text="Try again")
-                await ctx.send(embed=embed)
+                await interaction.response.send_message(embed=embed, ephemeral=True) 
             else:
                 if n == bet:
                     embed = discord.Embed(colour=colorEmbed)
@@ -193,22 +197,22 @@ class Games(commands.Cog):
                     embed.add_field(name="Your bet was: ", value=bet, inline=True)
                     embed.add_field(name="Conclusion: ", value="You fucking did it you finally achieved something in your life", inline=False)
                     embed.set_footer(text="Now move on with your live and get hobbys.")
-                    await ctx.send(embed=embed)
+                    await interaction.response.send_message(embed=embed, ephemeral=True) 
                 else:
                     embed = discord.Embed(colour=colorEmbed)
                     embed.add_field(name="You got: ", value=n, inline=True)
                     embed.add_field(name="Your bet was: ", value=bet, inline=True)
                     embed.add_field(name="Conclusion: ", value="You're a loser. And will have gambeling issues in your life", inline=False)
                     embed.set_footer(text="Now move on with your live and get hobbys.")
-                    await ctx.send(embed=embed)
+                    await interaction.response.send_message(embed=embed, ephemeral=False) 
         else:
             embed = discord.Embed(colour=colorEmbed)
             embed.add_field(name="You rolled a:", value=n, inline=False)
             embed.set_footer(text="Now move on with your live and get hobbys.")
-            await ctx.send(embed=embed)
+            await interaction.response.send_message(embed=embed, ephemeral=False) 
 
-    @cog_ext.cog_slash(name="coin", description="Just flip a coin (i dont know whuay you would).")
-    async def coinflip(self, ctx: SlashContext, bet=None):
+    @app_commands.command(name="coin", description="flip a coin (maybe even bet on one)")
+    async def coin(interaction: discord.Interaction, bet : int = None):
 
         #sending calledNUM Metric to influxdb.py
         global calledCoinflip, calledCoinflipH
@@ -223,24 +227,24 @@ class Games(commands.Cog):
             embed = discord.Embed(colour=colorEmbed)
             embed.add_field(name="You flipped: " + side, value="I really dont care why tho", inline=False)
             embed.set_footer(text="Now move on with your live and get hobbys.")
-            await ctx.send(embed=embed)
+            await interaction.response.send_message(embed=embed, ephemeral=False)
         else:
             if bet.lower() == "heads" or bet.lower() == "tails":
                 if side == bet:
                     embed = discord.Embed(colour=colorEmbed)
                     embed.add_field(name="You flipped: " + side, value="You fucking did it you finally achieved something in your life", inline=False)
                     embed.set_footer(text="Now move on with your live and get hobbys.")
-                    await ctx.send(embed=embed)
+                    await interaction.response.send_message(embed=embed, ephemeral=False)
                 else:
                     embed = discord.Embed(colour=colorEmbed)
                     embed.add_field(name="You flipped: " + side, value="You're a loser. And will have gambeling issues in your life", inline=False)
                     embed.set_footer(text="Now move on with your live and get hobbys.")
-                    await ctx.send(embed=embed)
+                    await interaction.response.send_message(embed=embed, ephemeral=False)
             else:
                 embed = discord.Embed(colour=colorEmbed)
                 embed.add_field(name="Idiot", value="You have to bet on heads or tails", inline=False)
                 embed.set_footer(text="Try again")
-                await ctx.send(embed=embed)
+                await interaction.response.send_message(embed=embed, ephemeral=False)
     
     @tasks.loop(hours=1)
     async def exporterH():
@@ -260,6 +264,11 @@ class Games(commands.Cog):
         
     exporterH.start()
 
+    bot.tree.add_command(rps, override=True)
+    bot.tree.add_command(hangman, override=True)
+    bot.tree.add_command(roll, override=True)
+    bot.tree.add_command(dice, override=True)
+    bot.tree.add_command(coin, override=True)
 
-def setup(bot):
-    bot.add_cog(Games(bot))
+async def setup(bot: commands.Bot) -> None:
+  await bot.add_cog(Games(bot))

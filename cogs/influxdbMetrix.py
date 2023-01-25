@@ -1,5 +1,6 @@
 from sqlite3 import Timestamp
 from discord.ext import commands, tasks
+import asyncio
 import psutil, datetime, time
 
 from influx.influxdbExport import sendingServers
@@ -10,25 +11,26 @@ from influx.influxdbExport import sendingSYS
 
 
 class InfluxMetrix(commands.Cog):
-    def __init__(self, bot):
-        self.bot = bot
-        self.exportServer.start()
-        self.getSysData.start()
-        self.getUptime.start()
+  def __init__(self, bot: commands.Bot) -> None:
+    self.bot = bot
+    
+    
 
     global startTime, timeStamp
     startTime = time.time()
+    self.uptime = 0
 
-    @tasks.loop(minutes=10)
+    @tasks.loop(minutes=5)
     async def exportServer(self):
         serversNum = len(self.bot.guilds)
 
         sendingServers(serversNum)
+    
 
     @tasks.loop(minutes=5)
     async def getSysData(self):
         ram = psutil.virtual_memory()
-        disk = psutil.disk_usage("/")
+        disk = psutil.disk_usage("/") # returns the disk usage on the disk the bot is running on
         i = 0
         send = []
 
@@ -52,11 +54,14 @@ class InfluxMetrix(commands.Cog):
     async def getUptime(self):
         seconds = round(time.time() - startTime)
         
-        #global timeStamp
+
         timeStamp = str(datetime.timedelta(seconds=seconds))
-        return timeStamp
+        InfluxMetrix.uptime = timeStamp
         
+    
+    asyncio.create_task(exportServer(self))
+    asyncio.create_task(getSysData(self))
+    asyncio.create_task(getUptime(self))
 
-
-def setup(bot):
-    bot.add_cog(InfluxMetrix(bot))
+async def setup(bot: commands.Bot) -> None:
+  await bot.add_cog(InfluxMetrix(bot))

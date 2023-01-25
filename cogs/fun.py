@@ -2,8 +2,9 @@ import discord
 from discord.ext import commands, tasks
 import random
 import json
-from discord_slash import cog_ext, SlashContext
+from discord import app_commands
 
+import image   
 import qrcode
 import os
 
@@ -26,12 +27,12 @@ calledKanyeH = [0, "kanye", cog]
 calledMagicballH = [0, "magicball", cog]
 calledQrcodeH = [0, "qrcode", cog]
 
-class fun(commands.Cog):
-    def __init__(self, bot):
-        self.bot = bot
+class Fun(commands.Cog):
+  def __init__(self, bot: commands.Bot) -> None:
+    self.bot = bot
 
-    @cog_ext.cog_slash(name="yoomum", description="be nice to moms") # getting a random yoomum joke from data/yoomum.json
-    async def yoomum(self, ctx: SlashContext, member: discord.Member = None):
+    @app_commands.command(name="yoomum", description="be nice to moms (you can tag people her)") # getting a random yoomum joke from data/yoomum.json
+    async def yoomum(interaction: discord.Interaction, member: discord.Member = None) -> None:
         #sending calledNUM Metric to influxdb.py
         global calledYoomum, calledYoomumH
         com = "yoomum"
@@ -46,19 +47,19 @@ class fun(commands.Cog):
             yoomum = random.choice(list(yoomum[random_category]))
 
         if member is not None:
-            author = ctx.author
+            author = interaction.user
             embed = discord.Embed(colour=colorEmbed)
             embed.add_field(name=yoomum, value="{} got owned by {}".format(member.mention, author.mention), inline=False)
-            await ctx.send(embed=embed)
+            await interaction.response.send_message(embed=embed, ephemeral=False)
         else:
-            author = ctx.author
+            author = interaction.user
             embed = discord.Embed(colour=colorEmbed)
             embed.add_field(name=yoomum, value="{} got owned by himself".format(author.mention), inline=False)
             embed.set_footer(text="what a loser")
-            await ctx.send(embed=embed)
+            await interaction.response.send_message(embed=embed, ephemeral=False)
     
-    @cog_ext.cog_slash(name="kanye", description="get a random Kanye West quote") # getting a random wisdom from data/weisheiten.json
-    async def kanye(self, ctx: SlashContext):
+    @app_commands.command(name="kanye", description="get a quote of kanye west") # getting a random wisdom from data/weisheiten.json
+    async def kanye(interaction: discord.Interaction) -> None:
         with open("data/kanyerest.json", encoding='utf-8') as wisdom_file:
             wisdom = json.load(wisdom_file)
             wisdom = random.choice(list(wisdom))
@@ -74,10 +75,10 @@ class fun(commands.Cog):
         embed = discord.Embed(colour=colorEmbed)
         embed.add_field(name=wisdom, value="This is a random quote by Kanye West", inline=False)
         embed.set_footer(text="Check out the Kanye Rest API here: https://github.com/ajzbc/kanye.rest")
-        await ctx.send(embed=embed)
+        await interaction.response.send_message(embed=embed, ephemeral=False)
 
-    @cog_ext.cog_slash(name="8ball", description="Ask the magic 8ball a question") # getting a random answer from data/8ball.json
-    async def magicball(self, ctx: SlashContext, question):
+    @app_commands.command(name="8ball", description="ask me a question") # getting a random answer from data/8ball.json
+    async def magicball(interaction: discord.Interaction, question: str):
 
         #sending calledNUM Metric to influxdb.py
         global calledMagicball, calledMagicballH
@@ -95,31 +96,30 @@ class fun(commands.Cog):
         embed = discord.Embed(colour=colorEmbed)
         embed.add_field(name=answers, value="The ball has spoken", inline=False)
         embed.set_footer(text="Just like my balls if you know what i mean")
-        await ctx.send(embed=embed)
+        await interaction.response.send_message(embed=embed, ephemeral=False)
     
-    @cog_ext.cog_slash(name="qr", description="Create a qrcode to a link") #generating a qr code based on the profided link=data
-    async def qrcode(self, ctx: SlashContext, arg):
-        qr = qrcode.QRCode(version=1, box_size=10, border=5)
-        data = arg
-
-        qr.add_data(data)
-        qr.make(fit=True)
-
-        img = qr.make_image(fill="black", back_color="white")
-        img.save("data/qr_code.png")
-
-        await ctx.send(file=discord.File('data/qr_code.png')) # files can not be send in an Embed :(
-
-        #sending calledNUM Metric to influxdb.py
+    @app_commands.command(name="qr", description="get a qr code of anything") #generating a qr code based on the profided link=data
+    async def qr(interaction: discord.Interaction, arg: str):
         global calledQrcode, calledQrcodeH
         com = "qrcode"
         calledQrcode += 1
-
         calledQrcodeH[0] += 1
 
-        sendingCom(cog, com, calledQrcode)
+        qr = qrcode.QRCode(
+            version=1,
+            error_correction=qrcode.constants.ERROR_CORRECT_L,
+            box_size=10,
+            border=4,
+        )
+        qr.add_data(arg)
+        qr.make(arg)
 
-        os.remove("data/qr_code.png")
+        img = qr.make_image(fill_color="black", back_color="white")
+        img.save("./data/qrcode.png")
+
+        await interaction.response.send_message("Here is your QR-Code:", file=discord.File('./data/qrcode.png'), ephemeral=False) # files can not be send in an Embed :(   
+
+        sendingCom(cog, com, calledQrcode)
 
     @tasks.loop(hours=1)
     async def exporterH():
@@ -138,5 +138,10 @@ class fun(commands.Cog):
 
     exporterH.start()
 
-def setup(bot):
-    bot.add_cog(fun(bot))
+    bot.tree.add_command(yoomum, override=True)
+    bot.tree.add_command(kanye, override=True)
+    bot.tree.add_command(magicball, override=True)
+    bot.tree.add_command(qr, override=True)
+
+async def setup(bot: commands.Bot) -> None:
+  await bot.add_cog(Fun(bot))

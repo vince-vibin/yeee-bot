@@ -27,7 +27,7 @@ class Animals(commands.Cog):
     self.bot = bot
 
 
-    @app_commands.command(name="cat") #sending a random cat pic from random.cat
+    @app_commands.command(name="cat", description="get a cute pic of a cat") #sending a random cat pic from random.cat
     async def cat(interaction: discord.interactions.Interaction) -> None:
         async with interaction.channel.typing():
 
@@ -49,9 +49,9 @@ class Animals(commands.Cog):
 
                     embed.set_footer(text="Powered by: http://random.cat")
                     
-                    await interaction.response.send_message(embed=embed, ephemeral=True)
+                    await interaction.response.send_message(embed=embed, ephemeral=False)
     
-    @app_commands.command(name="doggo") # sending a random dog pic from random.dog
+    @app_commands.command(name="doggo", description="get a cute pic of a doggo") # sending a random dog pic from random.dog
     async def doggo(interaction: discord.interactions.Interaction) -> None:
         async with interaction.channel.typing():
             gotPic = False
@@ -75,9 +75,9 @@ class Animals(commands.Cog):
                             embed = discord.Embed(colour=colorEmbed, title=":dog:") #sending the message
                             embed.set_image(url=data['url'])
                             embed.set_footer(text="Powered by: http://random.dog")
-                            await interaction.response.send_message(embed=embed, ephemeral=True)
+                            await interaction.response.send_message(embed=embed, ephemeral=False)
 
-    @app_commands.command(name="fox") # sending a random  fox pic from randomfox.ca
+    @app_commands.command(name="fox", description="get a cute pic of a fox") # sending a random  fox pic from randomfox.ca
     async def fox(interaction: discord.interactions.Interaction) -> None:
         async with interaction.channel.typing():
             async with aiohttp.ClientSession() as cs: #making the http-Request
@@ -94,9 +94,9 @@ class Animals(commands.Cog):
                     embed.set_image(url=data['image'])
                     embed.set_footer(text="Powered by: https://randomfox.ca/")
 
-                    await interaction.response.send_message(embed=embed, ephemeral=True)
+                    await interaction.response.send_message(embed=embed, ephemeral=False)
 
-    @app_commands.command(name="duccy") # sending a random duck pic from random-d.uk
+    @app_commands.command(name="duccy", description="get a cute pic of a duck") # sending a random duck pic from random-d.uk
     async def duccy(interaction: discord.interactions.Interaction) -> None:
         async with interaction.channel.typing():
             async with aiohttp.ClientSession() as cs: #making the http-Request
@@ -113,7 +113,7 @@ class Animals(commands.Cog):
                     embed.set_image(url=data['url'])
                     embed.set_footer(text="Powered by: https://random-d.uk")
 
-                    await interaction.response.send_message(embed=embed, ephemeral=True)
+                    await interaction.response.send_message(embed=embed, ephemeral=False)
 
     @tasks.loop(hours=1)
     async def exporterH():
