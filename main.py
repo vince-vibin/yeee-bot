@@ -33,23 +33,33 @@ async def syncFunc():
 @bot.event
 async def on_ready():
     print("    - loading cogs...")
-    await bot.add_cog(cogs.Basic(bot)) # not the best solution but at this point im to tired
-    await bot.add_cog(cogs.Animals(bot))
-    await bot.add_cog(cogs.Fun(bot))
-    await bot.add_cog(cogs.Games(bot))
-    await bot.add_cog(cogs.Help(bot))
-    await bot.add_cog(cogs.Reddit(bot))
-    await bot.add_cog(cogs.InfluxMetrix(bot))
-    print("        OK 👍")
+    try: 
+        await bot.add_cog(cogs.Basic(bot)) # not the best solution but at this point im to tired
+        await bot.add_cog(cogs.Animals(bot))
+        await bot.add_cog(cogs.Fun(bot))
+        await bot.add_cog(cogs.Games(bot))
+        await bot.add_cog(cogs.Help(bot))
+        await bot.add_cog(cogs.Reddit(bot))
+        await bot.add_cog(cogs.InfluxMetrix(bot))
+        print("        OK 👍")
+    except:
+        print("        FAILED 🥲")
 
     print("    - starting tasks...")
-    startInfluxMetrix.start()
+    try:
+        startInfluxMetrix.start()
+        print("        OK 👍")
+    except:
+        print("        FAILED 🥲")
 
     print("    - loading profile...")
-    activity = discord.Game(name="sleeping")
-    await syncFunc()
-    await bot.change_presence(status=discord.Status.idle, activity=activity)
-    print("        OK 👍")
+    try:
+        activity = discord.Game(name="sleeping")
+        await syncFunc()
+        await bot.change_presence(status=discord.Status.idle, activity=activity)
+        print("        OK 👍")
+    except:
+        print("        FAILED 🥲")
 
     print("[INFO] running on ", sys_version)
     
@@ -76,10 +86,11 @@ async def on_app_command_error(interaction : discord.Interaction, error : AppCom
 
 @tasks.loop(minutes=10)
 async def startInfluxMetrix():
-    await cogs.InfluxMetrix.exportServer(cogs.InfluxMetrix)
+    await cogs.InfluxMetrix.exportServer(cogs.InfluxMetrix, bot)
     await cogs.InfluxMetrix.getSysData(cogs.InfluxMetrix)
     await cogs.InfluxMetrix.getUptime(cogs.InfluxMetrix)
-    print("        OK 👍")
+    return
+    
 
 
 bot.run(TOKEN)

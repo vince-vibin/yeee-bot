@@ -1,5 +1,4 @@
-from sqlite3 import Timestamp
-from discord.ext import commands, tasks
+from discord.ext import commands
 
 import psutil, datetime, time
 
@@ -11,17 +10,16 @@ from influx.influxdbExport import sendingSYS
 
 
 class InfluxMetrix(commands.Cog):
-    def __init__(self, bot: commands.Bot) -> None:
+    def __init__(self, bot):
         self.bot = bot
-    
         global startTime, timeStamp
         startTime = time.time()
         self.uptime = 0
+    
         
-    async def exportServer(self):
-        serversNum = 69 #len(self.bot.guilds)
+    async def exportServer(self, bot):
+        serversNum = len(bot.guilds)
         sendingServers(serversNum)
-        return
     
     async def getSysData(self):
         ram = psutil.virtual_memory()
@@ -51,7 +49,6 @@ class InfluxMetrix(commands.Cog):
         timeStamp = str(datetime.timedelta(seconds=seconds))
         InfluxMetrix.uptime = timeStamp
 
-    
 
 def setup(bot):
     bot.add_cog(InfluxMetrix(bot))
